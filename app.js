@@ -17,6 +17,43 @@ class OnlineToolsApp {
         this.switchTool(this.currentTool);
     }
 
+    // Language Management
+    initLanguage() {
+        const lang = navigator.language.split('-')[0] || 'en';
+        const fallbackLang = 'en';
+
+        const applyTranslations = (messages) => {
+            const elements = document.querySelectorAll('[data-i18n]');
+            console.log(`[i18n] Applying translations to ${elements.length} elements`);
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (messages[key]) {
+                    el.textContent = messages[key];
+                } else {
+                    console.warn(`[i18n] Missing translation for key: ${key}`);
+                }
+            });
+        };
+
+        const loadLocale = (code) => {
+            fetch(`locales/${code}.json`)
+                .then(res => res.json())
+                .then(data => {
+                    applyTranslations(data);
+                })
+                .catch(err => {
+                    if (code !== fallbackLang) {
+                        console.log(`Falling back to ${fallbackLang}`);
+                        loadLocale(fallbackLang);
+                    } else {
+                        console.error('Failed to load translations', err);
+                    }
+                });
+        };
+
+        loadLocale(lang);
+    }
+
     // Theme Management
     initTheme() {
         const themeToggle = document.getElementById('themeToggle');
@@ -1391,7 +1428,14 @@ class OnlineToolsApp {
 }
 
 // Initialize the app when DOM is loaded
+// document.addEventListener('DOMContentLoaded', () => {
+//     console.log('DOM loaded, initializing app');
+//     window.toolsApp = new OnlineToolsApp();
+// });
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM loaded, initializing app');
-    window.toolsApp = new OnlineToolsApp();
+    const app = new OnlineToolsApp();
+    app.initLanguage();
+    console.log('Sbrigasigapone, la saponetta');
+    window.toolsApp = app;
 });
