@@ -9,6 +9,7 @@ class OnlineToolsApp {
         console.log('Initializing Online Tools App');
         this.initTheme();
         this.initNavigation();
+        this.initMobileMenu();
         this.initSearch();
         this.initTools();
         
@@ -21,15 +22,34 @@ class OnlineToolsApp {
         const themeToggle = document.getElementById('themeToggle');
         if (!themeToggle) return;
 
-        let currentTheme = 'light';
+        // Detect system preference
+        const getSystemTheme = () => {
+            return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        };
         
-        const setTheme = (theme) => {
+        // Get saved theme or use system preference
+        let currentTheme = localStorage.getItem('theme') || getSystemTheme();
+        
+        const setTheme = (theme, savePreference = true) => {
             currentTheme = theme;
             document.documentElement.setAttribute('data-color-scheme', theme);
             themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+            
+            if (savePreference) {
+                localStorage.setItem('theme', theme);
+            }
         };
 
-        setTheme(currentTheme);
+        // Set initial theme
+        setTheme(currentTheme, false);
+        
+        // Listen for system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            // Only update if user hasn't manually set a preference
+            if (!localStorage.getItem('theme')) {
+                setTheme(e.matches ? 'dark' : 'light', false);
+            }
+        });
         
         themeToggle.addEventListener('click', () => {
             const newTheme = currentTheme === 'light' ? 'dark' : 'light';
@@ -51,6 +71,36 @@ class OnlineToolsApp {
                 e.preventDefault();
                 console.log(`Clicked tool: ${toolId}`);
                 this.switchTool(toolId);
+            });
+        });
+    }
+
+    // Mobile Menu Management
+    initMobileMenu() {
+        const menuToggle = document.getElementById('mobileMenuToggle');
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        
+        if (!menuToggle || !sidebar || !overlay) return;
+        
+        const toggleMenu = () => {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            menuToggle.textContent = sidebar.classList.contains('active') ? '✕' : '☰';
+        };
+        
+        menuToggle.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', toggleMenu);
+        
+        // Close menu when clicking on a tool link
+        const toolLinks = document.querySelectorAll('.tool-link');
+        toolLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                    menuToggle.textContent = '☰';
+                }
             });
         });
     }

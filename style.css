@@ -1101,46 +1101,243 @@ select.form-control {
   pointer-events: none;
 }
 
+/* Mobile Menu Button */
+.mobile-menu-toggle {
+  display: none;
+  position: fixed;
+  top: var(--space-16);
+  left: var(--space-16);
+  z-index: 1001;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  padding: var(--space-8);
+  font-size: var(--font-size-xl);
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition: all var(--duration-fast) var(--ease-standard);
+}
+
+.mobile-menu-toggle:hover {
+  background: var(--color-secondary);
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--ease-standard);
+}
+
+.sidebar-overlay.active {
+  opacity: 1;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
+  /* Show mobile menu button */
+  .mobile-menu-toggle {
+    display: block;
+  }
+  
+  /* App layout for mobile */
   .app-container {
     grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: 1fr;
   }
   
+  /* Sidebar as overlay */
   .sidebar {
-    max-height: 200px;
-    border-right: none;
-    border-bottom: 1px solid var(--color-border);
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    max-width: 85vw;
+    transform: translateX(-100%);
+    transition: transform var(--duration-normal) var(--ease-standard);
+    z-index: 1000;
+    box-shadow: var(--shadow-lg);
   }
   
+  .sidebar.active {
+    transform: translateX(0);
+  }
+  
+  .sidebar-overlay {
+    display: block;
+    pointer-events: none;
+  }
+  
+  .sidebar-overlay.active {
+    pointer-events: auto;
+  }
+  
+  /* Main content adjustments */
   .main-content {
     padding: var(--space-16);
+    padding-top: calc(var(--space-16) + 48px); /* Space for menu button */
+  }
+  
+  /* Tool container responsive */
+  .tool-container {
+    max-width: 100%;
+  }
+  
+  /* Header adjustments */
+  .tool-header {
+    margin-bottom: var(--space-20);
   }
   
   .tool-header h2 {
     font-size: var(--font-size-2xl);
   }
   
-  .settings-grid {
-    grid-template-columns: 1fr;
+  .tool-header p {
+    font-size: var(--font-size-base);
   }
   
+  /* Content sections with reduced padding */
+  .input-section,
+  .output-section,
+  .options-section,
+  .settings-grid,
+  .generate-section,
+  .process-section,
+  .extract-section,
+  .convert-section,
+  .escape-section {
+    padding: var(--space-16);
+  }
+  
+  /* Settings grid single column */
+  .settings-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+  }
+  
+  /* Button groups responsive */
   .option-buttons,
   .case-buttons,
   .convert-buttons,
   .escape-buttons {
     flex-direction: column;
+    width: 100%;
   }
   
+  .option-buttons .btn,
+  .case-buttons .btn,
+  .convert-buttons .btn,
+  .escape-buttons .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  /* Form adjustments */
   .password-result {
     flex-direction: column;
   }
   
   .output-header {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: var(--space-8);
+  }
+  
+  /* Touch-friendly button sizes */
+  .btn {
+    min-height: 44px;
+    padding: var(--space-10) var(--space-16);
+  }
+  
+  .btn--sm {
+    min-height: 36px;
+    padding: var(--space-6) var(--space-12);
+  }
+  
+  /* Tool links touch targets */
+  .tool-link {
+    padding: var(--space-12) var(--space-16);
+    font-size: var(--font-size-base);
+  }
+  
+  /* Form controls */
+  .form-control {
+    font-size: 16px; /* Prevent zoom on iOS */
+    padding: var(--space-10) var(--space-12);
+  }
+  
+  /* Textarea adjustments */
+  textarea.form-control {
+    min-height: 120px;
+  }
+  
+  /* Results container */
+  .result-item {
+    padding: var(--space-10) var(--space-12);
+  }
+  
+  /* Username items */
+  .username-item {
+    padding: var(--space-10) var(--space-12);
+  }
+  
+  /* Emoji grid responsive */
+  .emoji-grid {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: var(--space-6);
+  }
+  
+  .emoji-grid span {
+    padding: var(--space-6);
+    font-size: var(--font-size-xs);
+  }
+  
+  /* Replacement options */
+  .replacement-options {
+    gap: var(--space-12);
+  }
+  
+  .replacement-options input[type="text"] {
+    width: 100%;
+    margin-left: 0;
+    margin-top: var(--space-8);
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+  .main-content {
+    padding: var(--space-12);
+    padding-top: calc(var(--space-12) + 48px);
+  }
+  
+  .tool-header h2 {
+    font-size: var(--font-size-xl);
+  }
+  
+  .input-section,
+  .output-section,
+  .options-section,
+  .settings-grid,
+  .generate-section,
+  .process-section,
+  .extract-section,
+  .convert-section,
+  .escape-section {
+    padding: var(--space-12);
+  }
+  
+  /* Smaller font in results for better fit */
+  .result-text,
+  .username-text {
+    font-size: var(--font-size-xs);
   }
 }
 

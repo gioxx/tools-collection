@@ -427,19 +427,19 @@ git push origin feature/nuovo-strumento
 
 ## 🗺️ Roadmap
 
-### Versione 1.1 (Q2 2024)
+### Versione 1.1 (Q3 2025)
 - [ ] Base64 Encoder/Decoder
 - [ ] URL Encoder/Decoder
 - [ ] JSON Formatter/Validator
 - [ ] Diff Checker
 
-### Versione 1.2 (Q3 2024)
+### Versione 1.2 (Q3 2025)
 - [ ] Regex Tester
 - [ ] Color Picker/Converter
 - [ ] Timestamp Converter
 - [ ] Hash Generator
 
-### Versione 2.0 (Q4 2024)
+### Versione 2.0 (Q4 2025)
 - [ ] PWA Support
 - [ ] Offline functionality
 - [ ] Import/Export settings
@@ -458,7 +458,7 @@ Questo progetto è rilasciato sotto licenza MIT. Vedi il file [LICENSE](LICENSE)
 ```
 MIT License
 
-Copyright (c) 2024 [Il tuo nome]
+Copyright (c) 2024 Andrea M.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -467,18 +467,18 @@ in the Software without restriction...
 
 ## 👥 Autori
 
-- **[Il tuo nome]** - *Sviluppatore principale* - [@tuousername](https://github.com/tuousername)
+- **Andrea Margiovanni** - *Sviluppatore principale* - [@amargiovanni](https://github.com/tuousername)
 
 ### Ringraziamenti
 
 - Icone emoji native per un'interfaccia amichevole
-- Community open source per l'ispirazione
-- Tutti i contributori e tester
+- Andrea Draghetti da cui ho copiato tutto
+- Tutti i contributori e tester (no, dai, ha fatto tutto Perplexity)
 
 ---
 
 <div align="center">
-    <p>Fatto con ❤️ da sviluppatori per sviluppatori</p>
+    <p>Fatto con ❤️ dalla AI per gli sviluppatori</p>
     <p>
         <a href="https://github.com/tuousername/tools-collection/issues">Segnala un Bug</a>
         ·
