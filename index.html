@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔧 Online Tools - Strumenti Online</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>🔧 Online Tools</h1>
+                <p>Collezione di utilità online</p>
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Cerca strumenti..." class="form-control">
+            </div>
+
+            <nav class="tool-nav">
+                <div class="tool-category">
+                    <h3>Elaborazione Testo</h3>
+                    <ul>
+                        <li><a href="#" data-tool="list-generator" class="tool-link active">📋 List Generator</a></li>
+                        <li><a href="#" data-tool="add-text-lines" class="tool-link">✏️ Aggiungi Testo alle Righe</a></li>
+                        <li><a href="#" data-tool="convert-case" class="tool-link">🔠 Converti Maiuscole/Minuscole</a></li>
+                        <li><a href="#" data-tool="remove-duplicates" class="tool-link">❌ Rimuovi Righe Duplicate</a></li>
+                        <li><a href="#" data-tool="remove-line-breaks" class="tool-link">📏 Rimuovi Interruzioni</a></li>
+                        <li><a href="#" data-tool="remove-lines-containing" class="tool-link">🚫 Rimuovi Righe che Contengono</a></li>
+                    </ul>
+                </div>
+                
+                <div class="tool-category">
+                    <h3>Generatori</h3>
+                    <ul>
+                        <li><a href="#" data-tool="password-generator" class="tool-link">🔑 Password Generator</a></li>
+                        <li><a href="#" data-tool="username-generator" class="tool-link">👤 Username Generator</a></li>
+                    </ul>
+                </div>
+
+                <div class="tool-category">
+                    <h3>Estrazione</h3>
+                    <ul>
+                        <li><a href="#" data-tool="domain-extractor" class="tool-link">🌐 Estrattore Domini</a></li>
+                        <li><a href="#" data-tool="email-extractor" class="tool-link">📧 Estrattore Email</a></li>
+                    </ul>
+                </div>
+
+                <div class="tool-category">
+                    <h3>Analisi</h3>
+                    <ul>
+                        <li><a href="#" data-tool="count-duplicates" class="tool-link">🔢 Conta Duplicati</a></li>
+                    </ul>
+                </div>
+
+                <div class="tool-category">
+                    <h3>Sicurezza</h3>
+                    <ul>
+                        <li><a href="#" data-tool="curl-burp-converter" class="tool-link">🧪 Curl to Burp Converter</a></li>
+                        <li><a href="#" data-tool="ioc-escape" class="tool-link">🛡️ IoC Escape Tool</a></li>
+                    </ul>
+                </div>
+
+                <div class="tool-category">
+                    <h3>Convertitori</h3>
+                    <ul>
+                        <li><a href="#" data-tool="emoji-converter" class="tool-link">😎 Emoji Shortcode Converter</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- List Generator Tool -->
+            <div id="list-generator" class="tool-container active">
+                <div class="tool-header">
+                    <h2>📋 List Generator</h2>
+                    <p>Converti il testo in diversi formati di lista</p>
+                </div>
+                <div class="tool-content">
+                    <div class="input-section">
+                        <label class="form-label">Testo di Input:</label>
+                        <textarea id="listInput" class="form-control" rows="8" placeholder="Inserisci il tuo testo qui, una voce per riga..."></textarea>
+                    </div>
+                    <div class="options-section">
+                        <h4>Formato Output:</h4>
+                        <div class="option-buttons">
+                            <button class="btn btn--secondary" data-format="numbered">Lista Numerata</button>
+                            <button class="btn btn--secondary" data-format="bulleted">Lista con Punti</button>
+                            <button class="btn btn--secondary" data-format="comma">Separato da Virgole</button>
+                            <button class="btn btn--secondary" data-format="pipe">Separato da Pipe</button>
+                        </div>
+                    </div>
+                    <div class="output-section">
+                        <div class="output-header">
+                            <label class="form-label">Risultato:</label>
+                            <button class="btn btn--sm" id="copyListResult">Copia</button>
+                        </div>
+                        <textarea id="listOutput" class="form-control" rows="8" readonly></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Password Generator Tool -->
+            <div id="password-generator" class="tool-container">
+                <div class="tool-header">
+                    <h2>🔑 Password Generator</h2>
+                    <p>Genera password forti e casuali</p>
+                </div>
+                <div class="tool-content">
+                    <div class="settings-grid">
+                        <div class="setting-item">
+                            <label class="form-label">Lunghezza: <span id="lengthValue">16</span></label>
+                            <input type="range" id="passwordLength" min="8" max="50" value="16" class="slider">
+                        </div>
+                        <div class="setting-item">
+                            <label><input type="checkbox" id="includeUppercase" checked> Maiuscole (A-Z)</label>
+                        </div>
+                        <div class="setting-item">
+                            <label><input type="checkbox" id="includeLowercase" checked> Minuscole (a-z)</label>
+                        </div>
+                        <div class="setting-item">
+                            <label><input type="checkbox" id="includeNumbers" checked> Numeri (0-9)</label>
+                        </div>
+                        <div class="setting-item">
+                            <label><input type="checkbox" id="includeSymbols"> Simboli (!@#$%)</label>
+                        </div>
+                    </div>
+                    <div class="generate-section">
+                        <button class="btn btn--primary" id="generatePassword">Genera Password</button>
+                        <div class="password-result">
+                            <input type="text" id="generatedPassword" class="form-control" readonly placeholder="La password apparirà qui...">
+                            <button class="btn btn--secondary" id="copyPassword">Copia</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Username Generator Tool -->
+            <div id="username-generator" class="tool-container">
+                <div class="tool-header">
+                    <h2>👤 Username Generator</h2>
+                    <p>Genera username unici</p>
+                </div>
+                <div class="tool-content">
+                    <div class="settings-grid">
+                        <div class="setting-item">
+                            <label class="form-label">Stile:</label>
+                            <select id="usernameStyle" class="form-control">
+                                <option value="random">Parole Casuali</option>
+                                <option value="tech">Stile Tech</option>
+                                <option value="fantasy">Fantasy</option>
+                                <option value="cool">Cool</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label class="form-label">Numero di username:</label>
+                            <input type="number" id="usernameCount" class="form-control" value="5" min="1" max="20">
+                        </div>
+                    </div>
+                    <div class="generate-section">
+                        <button class="btn btn--primary" id="generateUsernames">Genera Username</button>
+                        <div class="username-results" id="usernameResults"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Text to Lines Tool -->
+            <div id="add-text-lines" class="tool-container">
+                <div class="tool-header">
+                    <h2>✏️ Aggiungi Testo alle Righe</h2>
+                    <p>Aggiungi testo all'inizio o alla fine di ogni riga</p>
+                </div>
+                <div class="tool-content">
+                    <div class="input-section">
+                        <label class="form-label">Testo Originale:</label>
+                        <textarea id="originalText" class="form-control" rows="6" placeholder="Inserisci il tuo testo qui..."></textarea>
+                    </div>
+                    <div class="options-section">
+                        <div class="setting-item">
+                            <label class="form-label">Testo da aggiungere:</label>
+                            <input type="text" id="textToAdd" class="form-control" placeholder="es. - , * , >">
+                        </div>
+                        <div class="setting-item">
+                            <label><input type="radio" name="position" value="start" checked> Aggiungi all'inizio</label>
+                            <label><input type="radio" name="position" value="end"> Aggiungi alla fine</label>
+                        </div>
+                    </div>
+                    <div class="output-section">
+                        <div class="output-header">
+                            <label class="form-label">Risultato:</label>
+                            <button class="btn btn--sm" id="copyAddTextResult">Copia</button>
+                        </div>
+                        <textarea id="addTextOutput" class="form-control" rows="6" readonly></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Convert Case Tool -->
+            <div id="convert-case" class="tool-container">
+                <div class="tool-header">
+                    <h2>🔠 Converti Maiuscole/Minuscole</h2>
+                    <p>Converti il testo in diversi formati</p>
+                </div>
+                <div class="tool-content">
+                    <div class="input-section">
+                        <label class="form-label">Testo di Input:</label>
+                        <textarea id="caseInput" class="form-control" rows="6" placeholder="Inserisci il tuo testo qui..."></textarea>
+                    </div>
+                    <div class="options-section">
+                        <div class="case-buttons">
+                            <button class="btn btn--secondary" data-case="upper">MAIUSCOLO</button>
+                            <button class="btn btn--secondary" data-case="lower">minuscolo</button>
+                            <button class="btn btn--secondary" data-case="title">Title Case</button>
+                            <button class="btn btn--secondary" data-case="camel">camelCase</button>
+                            <button class="btn btn--secondary" data-case="snake">snake_case</button>
+                            <button class="btn btn--secondary" data-case="constant">CONSTANT_CASE</button>
+                        </div>
+                    </div>
+                    <div class="output-section">
+                        <div class="output-header">
+                            <label class="form-label">Risultato:</label>
+                            <button class="btn btn--sm" id="copyCaseResult">Copia</button>
+                        </div>
+                        <textarea id="caseOutput" class="form-control" rows="6" readonly></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Count Duplicates Tool -->
+            <div id="count-duplicates" class="tool-container">
+                <div class="tool-header">
+                    <h2>🔢 Conta Duplicati</h2>
+                    <p>Conta i duplicati in una lista</p>
+                </div>
+                <div class="tool-content">
+                    <div class="input-section">
+                        <label class="form-label">Lista (una voce per riga):</label>
+                        <textarea id="duplicateInput" class="form-control" rows="8" placeholder="Inserisci le voci della lista, una per riga..."></textarea>
+                    </div>
+                    <div class="options-section">
+                        <label><input type="checkbox" id="sortByCount"> Ordina per numero di occorrenze</label>
+                        <label><input type="checkbox" id="caseSensitiveDuplicates"> Sensibile alle maiuscole/minuscole</label>
+                    </div>
+                    <div class="analyze-section">
+                        <button class="btn btn--primary" id="analyzeDuplicates">Analizza</button>
+                        <div id="duplicateResults" class="results-container"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domain Extractor Tool -->
+            <div id="domain-extractor" class="tool-container">
+                <div class="tool-header">
+                    <h2>🌐 Estrattore Domini</h2>
+                    <p>Estrai domini da una lista di URL</p>
+                </div>
+                <div class="tool-content">
+                    <div class="input-section">
+                        <label class="form-label">URL (uno per riga):</label>
+                        <textarea id="urlInput" class="form-control" rows="8" placeholder="https://example.com/path
+https://subdomain.example.org/page
+..."></textarea>
+                    </div>
+                    <div class="options-section">
+                        <label><input type="checkbox" id="includeSubdomains" checked> Includi sottodomini</label>
+                    </div>
+                    <div class="extract-section">
+                        <button class="btn btn--primary" id="extractDomains">Estrai Domini</button>
+                        <div class="output-section">
+                            <div class="output-header">
+                                <label class="form-label">Domini estratti:</label>
+                                <button class="btn btn--sm" id="copyDomainsResult">Copia</button>
+                            </div>
+                            <textarea id="domainsOutput" class="form-control" rows="8" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Remove Duplicates Tool -->
+            <div id="remove-duplicates" class="tool-container">
+                <div class="tool-header">
+                    <h2>❌ Rimuovi Righe Duplicate</h2>
+                    <p>Rimuovi le righe duplicate da una lista</p>
+                </div>
+                <div class="tool-content">
+                    <div class="input-section">
+                        <label class="form-label">Testo di Input:</label>
+                        <textarea id="removeDuplicatesInput" class="form-control" rows="8" placeholder="Inserisci il tuo testo qui, una riga per voce..."></textarea>
+                    </div>
+                    <div class="options-section">
+                        <label><input type="checkbox" id="preserveOrder" checked> Mantieni ordine originale</label>
+                        <label><input type="checkbox" id="caseSensitiveRemove"> Sensibile alle maiuscole/minuscole</label>
+                    </div>
+                    <div class="process-section">
+                        <button class="btn btn--primary" id="removeDuplicatesBtn">Rimuovi Duplicati</button>
+                        <div class="output-section">
+                            <div class="output-header">
+                                <label class="form-label">Risultato:</label>
+                                <button class="btn btn--sm" id="copyRemoveDuplicatesResult">Copia</button>
+                            </div>
+                            <textarea id="removeDuplicatesOutput" class="form-control" rows="8" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Remove Line Breaks Tool -->
+            <div id="remove-line-breaks" class="tool-container">
+                <div class="tool-header">
+                    <h2>📏 Rimuovi Interruzioni di Riga</h2>
+                    <p>Rimuovi tutte le interruzioni di riga dal testo</p>
+                </div>
+                <div class="tool-content">
+                    <div class="input-section">
+                        <label class="form-label">Testo di Input:</label>
+                        <textarea id="lineBreaksInput" class="form-control" rows="8" placeholder="Inserisci il tuo testo con interruzioni di riga..."></textarea>
+                    </div>
+                    <div class="options-section">
+                        <h4>Sostituisci interruzioni con:</h4>
+                        <div class="replacement-options">
+                            <label><input type="radio" name="replacement" value="space" checked> Spazio</label>
+                            <label><input type="radio" name="replacement" value="nothing"> Niente</label>
+                            <label><input type="radio" name="replacement" value="custom"> Custom: <input type="text" id="customReplacement" placeholder=", "></label>
+                        </div>
+                    </div>
+                    <div class="process-section">
+                        <button class="btn btn--primary" id="removeLineBreaksBtn">Rimuovi Interruzioni</button>
+                        <div class="output-section">
+                            <div class="output-header">
+                                <label class="form-label">Risultato:</label>
+                                <button class="btn btn--sm" id="copyLineBreaksResult">Copia</button>
+                            </div>
+                            <textarea id="lineBreaksOutput" class="form-control" rows="4" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Remove Lines Containing Tool -->
+            <div id="remove-lines-containing" class="tool-container">
+                <div class="tool-header">
+                    <h2>🚫 Rimuovi Righe che Contengono</h2>
+                    <p>Elimina le righe che contengono parole specifiche</p>
+                </div>
+                <div class="tool-content">
+                    <div class="input-section">
+                        <label class="form-label">Testo di Input:</label>
+                        <textarea id="removeContainingInput" class="form-control" rows="8" placeholder="Inserisci il tuo testo qui..."></textarea>
+                    </div>
+                    <div class="options-section">
+                        <div class="setting-item">
+                            <label class="form-label">Parole/frasi da cercare (separate da virgole):</label>
+                            <input type="text" id="wordsToRemove" class="form-control" placeholder="es. spam, test, debug">
+                        </div>
+                        <label><input type="checkbox" id="caseSensitiveContaining"> Sensibile alle maiuscole/minuscole</label>
+                    </div>
+                    <div class="process-section">
+                        <button class="btn btn--primary" id="removeContainingBtn">Rimuovi Righe</button>
+                        <div class="stats" id="removeStats"></div>
+                        <div class="output-section">
+                            <div class="output-header">
+                                <label class="form-label">Risultato:</label>
+                                <button class="btn btn--sm" id="copyRemoveContainingResult">Copia</button>
+                            </div>
+                            <textarea id="removeContainingOutput" class="form-control" rows="8" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email Extractor Tool -->
+            <div id="email-extractor" class="tool-container">
+                <div class="tool-header">
+                    <h2>📧 Estrattore Email</h2>
+                    <p>Estrai tutte le email da un testo</p>
+                </div>
+                <div class="tool-content">
+                    <div class="input-section">
+                        <label class="form-label">Testo di Input:</label>
+                        <textarea id="emailInput" class="form-control" rows="8" placeholder="Inserisci il testo contenente email..."></textarea>
+                    </div>
+                    <div class="options-section">
+                        <label><input type="checkbox" id="removeDuplicateEmails" checked> Rimuovi email duplicate</label>
+                    </div>
+                    <div class="extract-section">
+                        <button class="btn btn--primary" id="extractEmailsBtn">Estrai Email</button>
+                        <div class="stats" id="emailStats"></div>
+                        <div class="output-section">
+                            <div class="output-header">
+                                <label class="form-label">Email estratte:</label>
+                                <button class="btn btn--sm" id="copyEmailsResult">Copia</button>
+                            </div>
+                            <textarea id="emailsOutput" class="form-control" rows="8" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Curl to Burp Converter Tool -->
+            <div id="curl-burp-converter" class="tool-container">
+                <div class="tool-header">
+                    <h2>🧪 Curl to Burp Converter</h2>
+                    <p>Converti comandi curl in formato HTTP di Burp Suite</p>
+                </div>
+                <div class="tool-content">
+                    <div class="input-section">
+                        <label class="form-label">Comando Curl:</label>
+                        <textarea id="curlInput" class="form-control" rows="6" placeholder="curl -X POST 'https://example.com/api' -H 'Content-Type: application/json' -d '{\"key\":\"value\"}'"></textarea>
+                    </div>
+                    <div class="convert-section">
+                        <button class="btn btn--primary" id="convertCurlBtn">Converti</button>
+                        <div class="output-section">
+                            <div class="output-header">
+                                <label class="form-label">Request HTTP per Burp:</label>
+                                <button class="btn btn--sm" id="copyCurlResult">Copia</button>
+                            </div>
+                            <textarea id="curlOutput" class="form-control" rows="12" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- IoC Escape Tool -->
+            <div id="ioc-escape" class="tool-container">
+                <div class="tool-header">
+                    <h2>🛡️ IoC Escape Tool</h2>
+                    <p>Escape o unescape IoC nel tuo testo</p>
+                </div>
+                <div class="tool-content">
+                    <div class="input-section">
+                        <label class="form-label">Testo di Input:</label>
+                        <textarea id="iocInput" class="form-control" rows="8" placeholder="Inserisci IP, domini, URL, hash..."></textarea>
+                    </div>
+                    <div class="escape-section">
+                        <div class="escape-buttons">
+                            <button class="btn btn--primary" id="escapeIocBtn">Escape IoCs</button>
+                            <button class="btn btn--secondary" id="unescapeIocBtn">Unescape IoCs</button>
+                        </div>
+                        <div class="output-section">
+                            <div class="output-header">
+                                <label class="form-label">Risultato:</label>
+                                <button class="btn btn--sm" id="copyIocResult">Copia</button>
+                            </div>
+                            <textarea id="iocOutput" class="form-control" rows="8" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emoji Shortcode Converter Tool -->
+            <div id="emoji-converter" class="tool-container">
+                <div class="tool-header">
+                    <h2>😎 Emoji Shortcode Converter</h2>
+                    <p>Converti gli shortcode emoji in emoji reali</p>
+                </div>
+                <div class="tool-content">
+                    <div class="input-section">
+                        <label class="form-label">Testo di Input:</label>
+                        <textarea id="emojiInput" class="form-control" rows="6" placeholder=":smile: :heart: :thumbsup: ciao :wave:"></textarea>
+                    </div>
+                    <div class="convert-section">
+                        <div class="convert-buttons">
+                            <button class="btn btn--primary" id="convertToEmojiBtn">Shortcode → Emoji</button>
+                            <button class="btn btn--secondary" id="convertToShortcodeBtn">Emoji → Shortcode</button>
+                        </div>
+                        <div class="output-section">
+                            <div class="output-header">
+                                <label class="form-label">Risultato:</label>
+                                <button class="btn btn--sm" id="copyEmojiResult">Copia</button>
+                            </div>
+                            <textarea id="emojiOutput" class="form-control" rows="6" readonly></textarea>
+                        </div>
+                    </div>
+                    <div class="emoji-reference">
+                        <h4>Shortcode comuni:</h4>
+                        <div class="emoji-grid">
+                            <span>:smile: 😄</span>
+                            <span>:heart: ❤️</span>
+                            <span>:thumbsup: 👍</span>
+                            <span>:wave: 👋</span>
+                            <span>:fire: 🔥</span>
+                            <span>:rocket: 🚀</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
