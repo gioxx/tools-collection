@@ -199,7 +199,7 @@ Converte tra emoji e shortcode.
 
 1. **Clona il repository**
 ```bash
-git clone https://github.com/tuousername/tools-collection.git
+git clone https://github.com/amargiovanni/tools-collection.git
 cd tools-collection
 ```
 
@@ -397,7 +397,7 @@ Contribuzioni sono benvenute! Ecco come puoi aiutare:
 ### 1. Fork & Clone
 ```bash
 # Fork su GitHub, poi:
-git clone https://github.com/tuousername/tools-collection.git
+git clone https://github.com/amargiovanni/tools-collection.git
 cd tools-collection
 git checkout -b feature/nuovo-strumento
 ```
@@ -467,7 +467,7 @@ in the Software without restriction...
 
 ## 👥 Autori
 
-- **Andrea Margiovanni** - *Sviluppatore principale* - [@amargiovanni](https://github.com/tuousername)
+- **Andrea Margiovanni** - *Sviluppatore principale* - [@amargiovanni](https://github.com/amargiovanni)
 
 ### Ringraziamenti
 
@@ -480,8 +480,8 @@ in the Software without restriction...
 <div align="center">
     <p>Fatto con ❤️ dalla AI per gli sviluppatori</p>
     <p>
-        <a href="https://github.com/tuousername/tools-collection/issues">Segnala un Bug</a>
+        <a href="https://github.com/amargiovanni/tools-collection/issues">Segnala un Bug</a>
         ·
-        <a href="https://github.com/tuousername/tools-collection/issues">Richiedi una Feature</a>
+        <a href="https://github.com/amargiovanni/tools-collection/issues">Richiedi una Feature</a>
     </p>
 </div>
