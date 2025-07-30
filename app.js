@@ -193,6 +193,15 @@ class OnlineToolsApp {
         this.initCurlBurpConverter();
         this.initIocEscape();
         this.initEmojiConverter();
+        this.initBase64Converter();
+        this.initUrlEncoder();
+        this.initJsonFormatter();
+        this.initDiffChecker();
+        this.initRegexTester();
+        this.initColorPicker();
+        this.initTimestampConverter();
+        this.initHashGenerator();
+        this.initXmlBeautifier();
     }
 
     // Utility function for copying to clipboard
@@ -520,6 +529,566 @@ class OnlineToolsApp {
         const container = document.getElementById('emoji-converter');
         if (!container) return;
         // Implementation here
+    }
+
+    // Base64 Encoder/Decoder
+    initBase64Converter() {
+        const container = document.getElementById('base64-converter');
+        if (!container) return;
+
+        const input = document.getElementById('base64Input');
+        const output = document.getElementById('base64Output');
+        const encodeBtn = document.getElementById('base64EncodeBtn');
+        const decodeBtn = document.getElementById('base64DecodeBtn');
+        const copyBtn = document.getElementById('copyBase64Result');
+
+        encodeBtn?.addEventListener('click', () => {
+            const text = input.value.trim();
+            if (!text) {
+                output.value = '';
+                return;
+            }
+            try {
+                output.value = btoa(unescape(encodeURIComponent(text)));
+            } catch (e) {
+                output.value = 'Errore: impossibile codificare il testo';
+            }
+        });
+
+        decodeBtn?.addEventListener('click', () => {
+            const text = input.value.trim();
+            if (!text) {
+                output.value = '';
+                return;
+            }
+            try {
+                output.value = decodeURIComponent(escape(atob(text)));
+            } catch (e) {
+                output.value = 'Errore: input non valido Base64';
+            }
+        });
+
+        copyBtn?.addEventListener('click', () => {
+            this.copyToClipboard(output.value);
+        });
+    }
+
+    // URL Encoder/Decoder
+    initUrlEncoder() {
+        const container = document.getElementById('url-encoder');
+        if (!container) return;
+
+        const input = document.getElementById('urlInput');
+        const output = document.getElementById('urlOutput');
+        const encodeBtn = document.getElementById('urlEncodeBtn');
+        const decodeBtn = document.getElementById('urlDecodeBtn');
+        const encodeComponentBtn = document.getElementById('urlEncodeComponentBtn');
+        const copyBtn = document.getElementById('copyUrlResult');
+
+        encodeBtn?.addEventListener('click', () => {
+            const text = input.value.trim();
+            if (!text) {
+                output.value = '';
+                return;
+            }
+            output.value = encodeURI(text);
+        });
+
+        decodeBtn?.addEventListener('click', () => {
+            const text = input.value.trim();
+            if (!text) {
+                output.value = '';
+                return;
+            }
+            try {
+                output.value = decodeURI(text);
+            } catch (e) {
+                output.value = 'Errore: URL non valido';
+            }
+        });
+
+        encodeComponentBtn?.addEventListener('click', () => {
+            const text = input.value.trim();
+            if (!text) {
+                output.value = '';
+                return;
+            }
+            output.value = encodeURIComponent(text);
+        });
+
+        copyBtn?.addEventListener('click', () => {
+            this.copyToClipboard(output.value);
+        });
+    }
+
+    // JSON Formatter/Validator
+    initJsonFormatter() {
+        const container = document.getElementById('json-formatter');
+        if (!container) return;
+
+        const input = document.getElementById('jsonInput');
+        const output = document.getElementById('jsonOutput');
+        const formatBtn = document.getElementById('formatJsonBtn');
+        const copyBtn = document.getElementById('copyJsonResult');
+        const validation = document.getElementById('jsonValidation');
+
+        formatBtn?.addEventListener('click', () => {
+            const text = input.value.trim();
+            if (!text) {
+                output.value = '';
+                validation.style.display = 'none';
+                return;
+            }
+
+            try {
+                const json = JSON.parse(text);
+                const indentValue = document.querySelector('input[name="jsonIndent"]:checked')?.value || '2';
+                
+                let indent;
+                if (indentValue === 'tab') {
+                    indent = '\t';
+                } else if (indentValue === 'compact') {
+                    indent = '';
+                } else {
+                    indent = parseInt(indentValue);
+                }
+
+                output.value = indent === '' ? JSON.stringify(json) : JSON.stringify(json, null, indent);
+                
+                validation.style.display = 'block';
+                validation.innerHTML = '<span style="color: var(--color-success);">✓ JSON valido</span>';
+                validation.className = 'stats success-message';
+            } catch (e) {
+                output.value = '';
+                validation.style.display = 'block';
+                validation.innerHTML = `<span style="color: var(--color-error);">✗ Errore: ${e.message}</span>`;
+                validation.className = 'stats error-message';
+            }
+        });
+
+        copyBtn?.addEventListener('click', () => {
+            this.copyToClipboard(output.value);
+        });
+    }
+
+    // Diff Checker
+    initDiffChecker() {
+        const container = document.getElementById('diff-checker');
+        if (!container) return;
+
+        const text1 = document.getElementById('diffText1');
+        const text2 = document.getElementById('diffText2');
+        const compareBtn = document.getElementById('compareDiffBtn');
+        const output = document.getElementById('diffOutput');
+        const stats = document.getElementById('diffStats');
+        const ignoreCaseCheck = document.getElementById('diffIgnoreCase');
+        const ignoreWhitespaceCheck = document.getElementById('diffIgnoreWhitespace');
+
+        compareBtn?.addEventListener('click', () => {
+            let content1 = text1.value;
+            let content2 = text2.value;
+
+            if (!content1 && !content2) {
+                output.innerHTML = 'Inserisci testo in entrambi i campi';
+                stats.style.display = 'none';
+                return;
+            }
+
+            // Apply options
+            if (ignoreCaseCheck?.checked) {
+                content1 = content1.toLowerCase();
+                content2 = content2.toLowerCase();
+            }
+
+            if (ignoreWhitespaceCheck?.checked) {
+                content1 = content1.replace(/\s+/g, ' ').trim();
+                content2 = content2.replace(/\s+/g, ' ').trim();
+            }
+
+            // Simple line-by-line diff
+            const lines1 = content1.split('\n');
+            const lines2 = content2.split('\n');
+            const maxLines = Math.max(lines1.length, lines2.length);
+            
+            let diffHtml = '';
+            let additions = 0;
+            let deletions = 0;
+            let unchanged = 0;
+
+            for (let i = 0; i < maxLines; i++) {
+                const line1 = lines1[i] || '';
+                const line2 = lines2[i] || '';
+
+                if (line1 === line2) {
+                    diffHtml += `<div style="color: var(--color-text-secondary);">${this.escapeHtml(line1)}</div>`;
+                    if (line1 || line2) unchanged++;
+                } else if (!line1 && line2) {
+                    diffHtml += `<div style="background: rgba(var(--color-success-rgb), 0.1); color: var(--color-success);">+ ${this.escapeHtml(line2)}</div>`;
+                    additions++;
+                } else if (line1 && !line2) {
+                    diffHtml += `<div style="background: rgba(var(--color-error-rgb), 0.1); color: var(--color-error);">- ${this.escapeHtml(line1)}</div>`;
+                    deletions++;
+                } else {
+                    diffHtml += `<div style="background: rgba(var(--color-error-rgb), 0.1); color: var(--color-error);">- ${this.escapeHtml(line1)}</div>`;
+                    diffHtml += `<div style="background: rgba(var(--color-success-rgb), 0.1); color: var(--color-success);">+ ${this.escapeHtml(line2)}</div>`;
+                    additions++;
+                    deletions++;
+                }
+            }
+
+            output.innerHTML = diffHtml || 'Nessuna differenza trovata';
+            
+            stats.style.display = 'block';
+            stats.innerHTML = `Aggiunte: ${additions} | Rimosse: ${deletions} | Invariate: ${unchanged}`;
+        });
+    }
+
+    // Helper method to escape HTML
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // Regex Tester
+    initRegexTester() {
+        const container = document.getElementById('regex-tester');
+        if (!container) return;
+
+        const patternInput = document.getElementById('regexPattern');
+        const textInput = document.getElementById('regexInput');
+        const globalCheck = document.getElementById('regexGlobal');
+        const ignoreCaseCheck = document.getElementById('regexIgnoreCase');
+        const multilineCheck = document.getElementById('regexMultiline');
+        const testBtn = document.getElementById('testRegexBtn');
+        const output = document.getElementById('regexOutput');
+        const stats = document.getElementById('regexStats');
+
+        testBtn?.addEventListener('click', () => {
+            const pattern = patternInput.value.trim();
+            const text = textInput.value;
+
+            if (!pattern || !text) {
+                output.textContent = 'Inserisci sia il pattern che il testo';
+                stats.style.display = 'none';
+                return;
+            }
+
+            try {
+                // Build flags
+                let flags = '';
+                if (globalCheck?.checked) flags += 'g';
+                if (ignoreCaseCheck?.checked) flags += 'i';
+                if (multilineCheck?.checked) flags += 'm';
+
+                // Parse pattern if it's in /pattern/flags format
+                let regexPattern = pattern;
+                if (pattern.startsWith('/')) {
+                    const lastSlash = pattern.lastIndexOf('/');
+                    if (lastSlash > 0) {
+                        regexPattern = pattern.substring(1, lastSlash);
+                        flags = pattern.substring(lastSlash + 1) || flags;
+                    }
+                }
+
+                const regex = new RegExp(regexPattern, flags);
+                const matches = [...text.matchAll(regex)];
+
+                if (matches.length === 0) {
+                    output.textContent = 'Nessuna corrispondenza trovata';
+                    stats.style.display = 'none';
+                } else {
+                    let resultHtml = '';
+                    matches.forEach((match, index) => {
+                        resultHtml += `<div style="margin-bottom: var(--space-8);">`;
+                        resultHtml += `<strong>Match ${index + 1}:</strong> "${this.escapeHtml(match[0])}"`;
+                        if (match.index !== undefined) {
+                            resultHtml += ` (posizione: ${match.index})`;
+                        }
+                        if (match.length > 1) {
+                            resultHtml += `<br>Gruppi: `;
+                            for (let i = 1; i < match.length; i++) {
+                                resultHtml += `[${i}] "${this.escapeHtml(match[i] || '')}" `;
+                            }
+                        }
+                        resultHtml += `</div>`;
+                    });
+                    output.innerHTML = resultHtml;
+                    
+                    stats.style.display = 'block';
+                    stats.textContent = `Trovate ${matches.length} corrispondenze`;
+                }
+            } catch (e) {
+                output.textContent = `Errore regex: ${e.message}`;
+                stats.style.display = 'none';
+            }
+        });
+    }
+
+    // Color Picker/Converter
+    initColorPicker() {
+        const container = document.getElementById('color-picker');
+        if (!container) return;
+
+        const colorInput = document.getElementById('colorInput');
+        const textInput = document.getElementById('colorTextInput');
+        const convertBtn = document.getElementById('convertColorBtn');
+        const preview = document.getElementById('colorPreview');
+        
+        // Sync color input with text input
+        colorInput?.addEventListener('change', () => {
+            textInput.value = colorInput.value;
+        });
+
+        const hexToRgb = (hex) => {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        };
+
+        const rgbToHsl = (r, g, b) => {
+            r /= 255;
+            g /= 255;
+            b /= 255;
+            const max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+
+            if (max === min) {
+                h = s = 0;
+            } else {
+                const d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+                    case g: h = ((b - r) / d + 2) / 6; break;
+                    case b: h = ((r - g) / d + 4) / 6; break;
+                }
+            }
+            return {
+                h: Math.round(h * 360),
+                s: Math.round(s * 100),
+                l: Math.round(l * 100)
+            };
+        };
+
+        convertBtn?.addEventListener('click', () => {
+            let color = textInput.value.trim() || colorInput.value;
+            if (!color) return;
+
+            let rgb;
+            
+            // Parse color
+            if (color.startsWith('#')) {
+                rgb = hexToRgb(color);
+            } else if (color.startsWith('rgb')) {
+                const match = color.match(/(\d+),\s*(\d+),\s*(\d+)/);
+                if (match) {
+                    rgb = { r: parseInt(match[1]), g: parseInt(match[2]), b: parseInt(match[3]) };
+                }
+            }
+
+            if (!rgb) {
+                // Try as hex without #
+                rgb = hexToRgb('#' + color);
+            }
+
+            if (rgb) {
+                const hex = '#' + ((1 << 24) + (rgb.r << 16) + (rgb.g << 8) + rgb.b).toString(16).slice(1);
+                const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+
+                document.getElementById('colorHex').textContent = hex.toUpperCase();
+                document.getElementById('colorRgb').textContent = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+                document.getElementById('colorRgba').textContent = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 1)`;
+                document.getElementById('colorHsl').textContent = `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
+                preview.style.backgroundColor = hex;
+                colorInput.value = hex;
+            }
+        });
+
+        // Add copy functionality
+        container.querySelectorAll('button[data-copy]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const elementId = btn.getAttribute('data-copy');
+                const text = document.getElementById(elementId)?.textContent;
+                if (text) this.copyToClipboard(text);
+            });
+        });
+    }
+
+    // Timestamp Converter
+    initTimestampConverter() {
+        const container = document.getElementById('timestamp-converter');
+        if (!container) return;
+
+        const timestampInput = document.getElementById('timestampInput');
+        const dateInput = document.getElementById('dateInput');
+        const currentBtn = document.getElementById('currentTimestampBtn');
+        const convertBtn = document.getElementById('convertTimestampBtn');
+
+        currentBtn?.addEventListener('click', () => {
+            const now = Date.now();
+            timestampInput.value = Math.floor(now / 1000);
+            convertBtn.click();
+        });
+
+        convertBtn?.addEventListener('click', () => {
+            let date;
+            
+            if (timestampInput.value) {
+                const timestamp = parseInt(timestampInput.value);
+                // Detect if milliseconds or seconds
+                date = new Date(timestamp < 10000000000 ? timestamp * 1000 : timestamp);
+            } else if (dateInput.value) {
+                date = new Date(dateInput.value);
+            } else {
+                return;
+            }
+
+            if (isNaN(date.getTime())) {
+                alert('Data non valida');
+                return;
+            }
+
+            document.getElementById('unixSeconds').textContent = Math.floor(date.getTime() / 1000);
+            document.getElementById('unixMilliseconds').textContent = date.getTime();
+            document.getElementById('iso8601').textContent = date.toISOString();
+            document.getElementById('utcString').textContent = date.toUTCString();
+            document.getElementById('localeString').textContent = date.toLocaleString();
+        });
+
+        // Add copy functionality
+        container.querySelectorAll('button[data-copy]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const elementId = btn.getAttribute('data-copy');
+                const text = document.getElementById(elementId)?.textContent;
+                if (text) this.copyToClipboard(text);
+            });
+        });
+    }
+
+    // Hash Generator
+    initHashGenerator() {
+        const container = document.getElementById('hash-generator');
+        if (!container) return;
+
+        const input = document.getElementById('hashInput');
+        const generateBtn = document.getElementById('generateHashBtn');
+
+        // Simple hash functions (for demonstration - in production use crypto libraries)
+        const simpleHash = async (text, algorithm) => {
+            const msgBuffer = new TextEncoder().encode(text);
+            const hashBuffer = await crypto.subtle.digest(algorithm, msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        };
+
+        generateBtn?.addEventListener('click', async () => {
+            const text = input.value;
+            if (!text) return;
+
+            try {
+                // Note: MD5 is not available in Web Crypto API, showing placeholder
+                document.getElementById('md5Hash').textContent = 'MD5 non supportato nel browser';
+                document.getElementById('sha1Hash').textContent = await simpleHash(text, 'SHA-1');
+                document.getElementById('sha256Hash').textContent = await simpleHash(text, 'SHA-256');
+                document.getElementById('sha512Hash').textContent = await simpleHash(text, 'SHA-512');
+            } catch (e) {
+                alert('Errore nella generazione hash: ' + e.message);
+            }
+        });
+
+        // Add copy functionality
+        container.querySelectorAll('button[data-copy]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const elementId = btn.getAttribute('data-copy');
+                const text = document.getElementById(elementId)?.textContent;
+                if (text && text !== 'MD5 non supportato nel browser') this.copyToClipboard(text);
+            });
+        });
+    }
+
+    // XML Beautifier
+    initXmlBeautifier() {
+        const container = document.getElementById('xml-beautifier');
+        if (!container) return;
+
+        const input = document.getElementById('xmlInput');
+        const output = document.getElementById('xmlOutput');
+        const formatBtn = document.getElementById('formatXmlBtn');
+        const copyBtn = document.getElementById('copyXmlResult');
+        const validation = document.getElementById('xmlValidation');
+
+        const formatXml = (xml, indent) => {
+            const PADDING = indent === '\t' ? '\t' : ' '.repeat(parseInt(indent) || 2);
+            const reg = /(>)(<)(\/*)/g;
+            let formatted = '';
+            let pad = 0;
+
+            xml = xml.replace(reg, '$1\r\n$2$3');
+            const lines = xml.split('\r\n');
+
+            lines.forEach(line => {
+                let indentChange = 0;
+                if (line.match(/.+<\/\w[^>]*>$/)) {
+                    indentChange = 0;
+                } else if (line.match(/^<\/\w/)) {
+                    if (pad !== 0) {
+                        pad -= 1;
+                    }
+                } else if (line.match(/^<\w[^>]*[^\/]>.*$/)) {
+                    indentChange = 1;
+                }
+
+                formatted += PADDING.repeat(pad) + line + '\r\n';
+                pad += indentChange;
+            });
+
+            return formatted.trim();
+        };
+
+        formatBtn?.addEventListener('click', () => {
+            const xml = input.value.trim();
+            if (!xml) {
+                output.value = '';
+                validation.style.display = 'none';
+                return;
+            }
+
+            try {
+                // Parse XML to validate
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xml, 'text/xml');
+                const parseError = xmlDoc.querySelector('parsererror');
+
+                if (parseError) {
+                    output.value = '';
+                    validation.style.display = 'block';
+                    validation.innerHTML = `<span style="color: var(--color-error);">✗ XML non valido: ${parseError.textContent}</span>`;
+                    validation.className = 'stats error-message';
+                } else {
+                    const indentValue = document.querySelector('input[name="xmlIndent"]:checked')?.value || '2';
+                    const indent = indentValue === 'tab' ? '\t' : indentValue;
+                    
+                    output.value = formatXml(xml, indent);
+                    
+                    validation.style.display = 'block';
+                    validation.innerHTML = '<span style="color: var(--color-success);">✓ XML valido</span>';
+                    validation.className = 'stats success-message';
+                }
+            } catch (e) {
+                output.value = '';
+                validation.style.display = 'block';
+                validation.innerHTML = `<span style="color: var(--color-error);">✗ Errore: ${e.message}</span>`;
+                validation.className = 'stats error-message';
+            }
+        });
+
+        copyBtn?.addEventListener('click', () => {
+            this.copyToClipboard(output.value);
+        });
     }
 }
 

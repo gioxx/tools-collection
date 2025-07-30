@@ -1309,6 +1309,11 @@ select.form-control {
     margin-left: 0;
     margin-top: var(--space-8);
   }
+  
+  /* Diff checker responsive */
+  #diff-checker .input-section > div {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 /* Extra small devices */

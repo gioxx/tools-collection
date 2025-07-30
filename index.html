@@ -74,6 +74,27 @@
                     <h3>Convertitori</h3>
                     <ul>
                         <li><a href="#" data-tool="emoji-converter" class="tool-link">😎 Emoji Shortcode Converter</a></li>
+                        <li><a href="#" data-tool="base64-converter" class="tool-link">🔐 Base64 Encoder/Decoder</a></li>
+                        <li><a href="#" data-tool="url-encoder" class="tool-link">🔗 URL Encoder/Decoder</a></li>
+                    </ul>
+                </div>
+
+                <div class="tool-category">
+                    <h3>Sviluppo</h3>
+                    <ul>
+                        <li><a href="#" data-tool="json-formatter" class="tool-link">📄 JSON Formatter/Validator</a></li>
+                        <li><a href="#" data-tool="diff-checker" class="tool-link">🔍 Diff Checker</a></li>
+                        <li><a href="#" data-tool="regex-tester" class="tool-link">🔤 Regex Tester</a></li>
+                        <li><a href="#" data-tool="xml-beautifier" class="tool-link">📋 XML Beautifier</a></li>
+                    </ul>
+                </div>
+
+                <div class="tool-category">
+                    <h3>Utilità</h3>
+                    <ul>
+                        <li><a href="#" data-tool="color-picker" class="tool-link">🎨 Color Picker/Converter</a></li>
+                        <li><a href="#" data-tool="timestamp-converter" class="tool-link">🕐 Timestamp Converter</a></li>
+                        <li><a href="#" data-tool="hash-generator" class="tool-link">🔏 Hash Generator</a></li>
                     </ul>
                 </div>
             </nav>
@@ -493,6 +514,364 @@ https://subdomain.example.org/page
                             <span>:fire: 🔥</span>
                             <span>:rocket: 🚀</span>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Base64 Encoder/Decoder Tool -->
+            <div id="base64-converter" class="tool-container">
+                <div class="tool-header">
+                    <h2>🔐 Base64 Encoder/Decoder</h2>
+                    <p>Codifica e decodifica testo in Base64</p>
+                </div>
+                <div class="tool-content">
+                    <div class="input-section">
+                        <label class="form-label">Testo di Input:</label>
+                        <textarea id="base64Input" class="form-control" rows="6" placeholder="Inserisci il testo da codificare o decodificare..."></textarea>
+                    </div>
+                    <div class="convert-section">
+                        <div class="convert-buttons">
+                            <button class="btn btn--primary" id="base64EncodeBtn">Encode Base64</button>
+                            <button class="btn btn--secondary" id="base64DecodeBtn">Decode Base64</button>
+                        </div>
+                        <div class="output-section">
+                            <div class="output-header">
+                                <label class="form-label">Risultato:</label>
+                                <button class="btn btn--sm" id="copyBase64Result">Copia</button>
+                            </div>
+                            <textarea id="base64Output" class="form-control" rows="6" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- URL Encoder/Decoder Tool -->
+            <div id="url-encoder" class="tool-container">
+                <div class="tool-header">
+                    <h2>🔗 URL Encoder/Decoder</h2>
+                    <p>Codifica e decodifica URL e parametri</p>
+                </div>
+                <div class="tool-content">
+                    <div class="input-section">
+                        <label class="form-label">Testo di Input:</label>
+                        <textarea id="urlInput" class="form-control" rows="6" placeholder="https://example.com?param=value with spaces"></textarea>
+                    </div>
+                    <div class="convert-section">
+                        <div class="convert-buttons">
+                            <button class="btn btn--primary" id="urlEncodeBtn">Encode URL</button>
+                            <button class="btn btn--secondary" id="urlDecodeBtn">Decode URL</button>
+                            <button class="btn btn--secondary" id="urlEncodeComponentBtn">Encode Component</button>
+                        </div>
+                        <div class="output-section">
+                            <div class="output-header">
+                                <label class="form-label">Risultato:</label>
+                                <button class="btn btn--sm" id="copyUrlResult">Copia</button>
+                            </div>
+                            <textarea id="urlOutput" class="form-control" rows="6" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- JSON Formatter/Validator Tool -->
+            <div id="json-formatter" class="tool-container">
+                <div class="tool-header">
+                    <h2>📄 JSON Formatter/Validator</h2>
+                    <p>Formatta e valida JSON con evidenziazione errori</p>
+                </div>
+                <div class="tool-content">
+                    <div class="input-section">
+                        <label class="form-label">JSON di Input:</label>
+                        <textarea id="jsonInput" class="form-control" rows="10" placeholder='{"name": "example", "value": 123}'></textarea>
+                    </div>
+                    <div class="options-section">
+                        <div class="setting-item">
+                            <label>
+                                <input type="radio" name="jsonIndent" value="2" checked> 2 spazi
+                            </label>
+                            <label>
+                                <input type="radio" name="jsonIndent" value="4"> 4 spazi
+                            </label>
+                            <label>
+                                <input type="radio" name="jsonIndent" value="tab"> Tab
+                            </label>
+                            <label>
+                                <input type="radio" name="jsonIndent" value="compact"> Compatto
+                            </label>
+                        </div>
+                    </div>
+                    <div class="process-section">
+                        <button class="btn btn--primary btn--full-width" id="formatJsonBtn">Formatta JSON</button>
+                        <div id="jsonValidation" class="stats" style="display: none;"></div>
+                    </div>
+                    <div class="output-section">
+                        <div class="output-header">
+                            <label class="form-label">JSON Formattato:</label>
+                            <button class="btn btn--sm" id="copyJsonResult">Copia</button>
+                        </div>
+                        <textarea id="jsonOutput" class="form-control" rows="10" readonly></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Diff Checker Tool -->
+            <div id="diff-checker" class="tool-container">
+                <div class="tool-header">
+                    <h2>🔍 Diff Checker</h2>
+                    <p>Confronta due testi e trova le differenze</p>
+                </div>
+                <div class="tool-content">
+                    <div class="input-section">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-16);">
+                            <div>
+                                <label class="form-label">Testo Originale:</label>
+                                <textarea id="diffText1" class="form-control" rows="10" placeholder="Inserisci il primo testo..."></textarea>
+                            </div>
+                            <div>
+                                <label class="form-label">Testo Modificato:</label>
+                                <textarea id="diffText2" class="form-control" rows="10" placeholder="Inserisci il secondo testo..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="options-section">
+                        <label>
+                            <input type="checkbox" id="diffIgnoreCase"> Ignora maiuscole/minuscole
+                        </label>
+                        <label style="margin-left: var(--space-16);">
+                            <input type="checkbox" id="diffIgnoreWhitespace"> Ignora spazi bianchi
+                        </label>
+                    </div>
+                    <div class="process-section">
+                        <button class="btn btn--primary btn--full-width" id="compareDiffBtn">Confronta Testi</button>
+                    </div>
+                    <div class="output-section">
+                        <div class="output-header">
+                            <label class="form-label">Differenze:</label>
+                            <div id="diffStats" class="stats" style="display: none;"></div>
+                        </div>
+                        <div id="diffOutput" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-base); padding: var(--space-16); min-height: 200px; font-family: var(--font-family-mono); font-size: var(--font-size-sm); white-space: pre-wrap; overflow-x: auto;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Regex Tester Tool -->
+            <div id="regex-tester" class="tool-container">
+                <div class="tool-header">
+                    <h2>🔤 Regex Tester</h2>
+                    <p>Testa e debugga espressioni regolari in tempo reale</p>
+                </div>
+                <div class="tool-content">
+                    <div class="input-section">
+                        <label class="form-label">Pattern Regex:</label>
+                        <input type="text" id="regexPattern" class="form-control" placeholder="/pattern/flags (es: /test/gi)">
+                        <div style="margin-top: var(--space-8);">
+                            <label style="margin-right: var(--space-16);"><input type="checkbox" id="regexGlobal"> Global (g)</label>
+                            <label style="margin-right: var(--space-16);"><input type="checkbox" id="regexIgnoreCase"> Ignore Case (i)</label>
+                            <label><input type="checkbox" id="regexMultiline"> Multiline (m)</label>
+                        </div>
+                    </div>
+                    <div class="input-section">
+                        <label class="form-label">Testo di Test:</label>
+                        <textarea id="regexInput" class="form-control" rows="6" placeholder="Inserisci il testo su cui testare la regex..."></textarea>
+                    </div>
+                    <div class="process-section">
+                        <button class="btn btn--primary btn--full-width" id="testRegexBtn">Testa Regex</button>
+                    </div>
+                    <div class="output-section">
+                        <div class="output-header">
+                            <label class="form-label">Risultati:</label>
+                            <div id="regexStats" class="stats" style="display: none;"></div>
+                        </div>
+                        <div id="regexOutput" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-base); padding: var(--space-16); min-height: 100px; font-family: var(--font-family-mono); font-size: var(--font-size-sm); white-space: pre-wrap;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Color Picker/Converter Tool -->
+            <div id="color-picker" class="tool-container">
+                <div class="tool-header">
+                    <h2>🎨 Color Picker/Converter</h2>
+                    <p>Seleziona colori e converti tra diversi formati</p>
+                </div>
+                <div class="tool-content">
+                    <div class="input-section">
+                        <div style="display: grid; grid-template-columns: auto 1fr; gap: var(--space-16); align-items: center;">
+                            <input type="color" id="colorInput" style="width: 80px; height: 40px; border: 1px solid var(--color-border); border-radius: var(--radius-base); cursor: pointer;">
+                            <div>
+                                <label class="form-label">O inserisci un colore:</label>
+                                <input type="text" id="colorTextInput" class="form-control" placeholder="#FF5733, rgb(255,87,51), hsl(11,100%,60%)">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="process-section">
+                        <button class="btn btn--primary btn--full-width" id="convertColorBtn">Converti Colore</button>
+                    </div>
+                    <div class="output-section">
+                        <div class="output-header">
+                            <label class="form-label">Formati Colore:</label>
+                        </div>
+                        <div class="results-container">
+                            <div class="result-item">
+                                <span>HEX:</span>
+                                <span id="colorHex" class="result-text"></span>
+                                <button class="btn btn--sm" data-copy="colorHex">Copia</button>
+                            </div>
+                            <div class="result-item">
+                                <span>RGB:</span>
+                                <span id="colorRgb" class="result-text"></span>
+                                <button class="btn btn--sm" data-copy="colorRgb">Copia</button>
+                            </div>
+                            <div class="result-item">
+                                <span>RGBA:</span>
+                                <span id="colorRgba" class="result-text"></span>
+                                <button class="btn btn--sm" data-copy="colorRgba">Copia</button>
+                            </div>
+                            <div class="result-item">
+                                <span>HSL:</span>
+                                <span id="colorHsl" class="result-text"></span>
+                                <button class="btn btn--sm" data-copy="colorHsl">Copia</button>
+                            </div>
+                            <div class="result-item">
+                                <span>Preview:</span>
+                                <div id="colorPreview" style="width: 100px; height: 30px; border: 1px solid var(--color-border); border-radius: var(--radius-sm);"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timestamp Converter Tool -->
+            <div id="timestamp-converter" class="tool-container">
+                <div class="tool-header">
+                    <h2>🕐 Timestamp Converter</h2>
+                    <p>Converti tra timestamp Unix e date leggibili</p>
+                </div>
+                <div class="tool-content">
+                    <div class="input-section">
+                        <label class="form-label">Timestamp Unix (secondi o millisecondi):</label>
+                        <input type="text" id="timestampInput" class="form-control" placeholder="1699999999">
+                        <button class="btn btn--secondary" id="currentTimestampBtn" style="margin-top: var(--space-8);">Usa Timestamp Corrente</button>
+                    </div>
+                    <div class="input-section">
+                        <label class="form-label">O inserisci una data:</label>
+                        <input type="datetime-local" id="dateInput" class="form-control">
+                    </div>
+                    <div class="process-section">
+                        <button class="btn btn--primary btn--full-width" id="convertTimestampBtn">Converti</button>
+                    </div>
+                    <div class="output-section">
+                        <div class="output-header">
+                            <label class="form-label">Risultati:</label>
+                        </div>
+                        <div class="results-container">
+                            <div class="result-item">
+                                <span>Unix (secondi):</span>
+                                <span id="unixSeconds" class="result-text"></span>
+                                <button class="btn btn--sm" data-copy="unixSeconds">Copia</button>
+                            </div>
+                            <div class="result-item">
+                                <span>Unix (millisecondi):</span>
+                                <span id="unixMilliseconds" class="result-text"></span>
+                                <button class="btn btn--sm" data-copy="unixMilliseconds">Copia</button>
+                            </div>
+                            <div class="result-item">
+                                <span>ISO 8601:</span>
+                                <span id="iso8601" class="result-text"></span>
+                                <button class="btn btn--sm" data-copy="iso8601">Copia</button>
+                            </div>
+                            <div class="result-item">
+                                <span>UTC:</span>
+                                <span id="utcString" class="result-text"></span>
+                                <button class="btn btn--sm" data-copy="utcString">Copia</button>
+                            </div>
+                            <div class="result-item">
+                                <span>Locale:</span>
+                                <span id="localeString" class="result-text"></span>
+                                <button class="btn btn--sm" data-copy="localeString">Copia</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hash Generator Tool -->
+            <div id="hash-generator" class="tool-container">
+                <div class="tool-header">
+                    <h2>🔏 Hash Generator</h2>
+                    <p>Genera hash crittografici del testo</p>
+                </div>
+                <div class="tool-content">
+                    <div class="input-section">
+                        <label class="form-label">Testo da Hash:</label>
+                        <textarea id="hashInput" class="form-control" rows="4" placeholder="Inserisci il testo da convertire in hash..."></textarea>
+                    </div>
+                    <div class="process-section">
+                        <button class="btn btn--primary btn--full-width" id="generateHashBtn">Genera Hash</button>
+                    </div>
+                    <div class="output-section">
+                        <div class="output-header">
+                            <label class="form-label">Hash Generati:</label>
+                        </div>
+                        <div class="results-container">
+                            <div class="result-item">
+                                <span style="min-width: 80px;">MD5:</span>
+                                <span id="md5Hash" class="result-text" style="font-size: var(--font-size-xs);"></span>
+                                <button class="btn btn--sm" data-copy="md5Hash">Copia</button>
+                            </div>
+                            <div class="result-item">
+                                <span style="min-width: 80px;">SHA-1:</span>
+                                <span id="sha1Hash" class="result-text" style="font-size: var(--font-size-xs);"></span>
+                                <button class="btn btn--sm" data-copy="sha1Hash">Copia</button>
+                            </div>
+                            <div class="result-item">
+                                <span style="min-width: 80px;">SHA-256:</span>
+                                <span id="sha256Hash" class="result-text" style="font-size: var(--font-size-xs);"></span>
+                                <button class="btn btn--sm" data-copy="sha256Hash">Copia</button>
+                            </div>
+                            <div class="result-item">
+                                <span style="min-width: 80px;">SHA-512:</span>
+                                <span id="sha512Hash" class="result-text" style="font-size: var(--font-size-xs); word-break: break-all;"></span>
+                                <button class="btn btn--sm" data-copy="sha512Hash">Copia</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- XML Beautifier Tool -->
+            <div id="xml-beautifier" class="tool-container">
+                <div class="tool-header">
+                    <h2>📋 XML Beautifier</h2>
+                    <p>Formatta e valida documenti XML</p>
+                </div>
+                <div class="tool-content">
+                    <div class="input-section">
+                        <label class="form-label">XML di Input:</label>
+                        <textarea id="xmlInput" class="form-control" rows="10" placeholder='<?xml version="1.0"?><root><item>value</item></root>'></textarea>
+                    </div>
+                    <div class="options-section">
+                        <div class="setting-item">
+                            <label>
+                                <input type="radio" name="xmlIndent" value="2" checked> 2 spazi
+                            </label>
+                            <label>
+                                <input type="radio" name="xmlIndent" value="4"> 4 spazi
+                            </label>
+                            <label>
+                                <input type="radio" name="xmlIndent" value="tab"> Tab
+                            </label>
+                        </div>
+                    </div>
+                    <div class="process-section">
+                        <button class="btn btn--primary btn--full-width" id="formatXmlBtn">Formatta XML</button>
+                        <div id="xmlValidation" class="stats" style="display: none;"></div>
+                    </div>
+                    <div class="output-section">
+                        <div class="output-header">
+                            <label class="form-label">XML Formattato:</label>
+                            <button class="btn btn--sm" id="copyXmlResult">Copia</button>
+                        </div>
+                        <textarea id="xmlOutput" class="form-control" rows="10" readonly></textarea>
                     </div>
                 </div>
             </div>
