@@ -428,16 +428,16 @@ git push origin feature/nuovo-strumento
 ## 🗺️ Roadmap
 
 ### Versione 1.1 (Q3 2025)
-- [ ] Base64 Encoder/Decoder
-- [ ] URL Encoder/Decoder
-- [ ] JSON Formatter/Validator
-- [ ] Diff Checker
+- [X] Base64 Encoder/Decoder
+- [X] URL Encoder/Decoder
+- [X] JSON Formatter/Validator
+- [X] Diff Checker
 
 ### Versione 1.2 (Q3 2025)
-- [ ] Regex Tester
-- [ ] Color Picker/Converter
-- [ ] Timestamp Converter
-- [ ] Hash Generator
+- [X] Regex Tester
+- [X] Color Picker/Converter
+- [X] Timestamp Converter
+- [X] Hash Generator
 
 ### Versione 2.0 (Q4 2025)
 - [ ] PWA Support

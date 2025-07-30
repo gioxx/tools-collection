@@ -67,6 +67,10 @@
                     <ul>
                         <li><a href="#" data-tool="curl-burp-converter" class="tool-link">🧪 Curl to Burp Converter</a></li>
                         <li><a href="#" data-tool="ioc-escape" class="tool-link">🛡️ IoC Escape Tool</a></li>
+                        <li><a href="#" data-tool="jwt-decoder" class="tool-link">🔑 JWT Decoder/Validator</a></li>
+                        <li><a href="#" data-tool="cert-extractor" class="tool-link">📜 Certificate Info Extractor</a></li>
+                        <li><a href="#" data-tool="password-checker" class="tool-link">🔒 Password Strength Checker</a></li>
+                        <li><a href="#" data-tool="qr-generator" class="tool-link">📱 QR Code Generator/Reader</a></li>
                     </ul>
                 </div>
 
@@ -872,6 +876,202 @@ https://subdomain.example.org/page
                             <button class="btn btn--sm" id="copyXmlResult">Copia</button>
                         </div>
                         <textarea id="xmlOutput" class="form-control" rows="10" readonly></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- JWT Decoder/Validator Tool -->
+            <div id="jwt-decoder" class="tool-container">
+                <div class="tool-header">
+                    <h2>🔑 JWT Decoder/Validator</h2>
+                    <p>Decodifica e valida token JWT (JSON Web Token)</p>
+                </div>
+                <div class="tool-content">
+                    <div class="input-section">
+                        <label class="form-label">JWT Token:</label>
+                        <textarea id="jwtInput" class="form-control" rows="4" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."></textarea>
+                    </div>
+                    <div class="process-section">
+                        <button class="btn btn--primary btn--full-width" id="decodeJwtBtn">Decodifica JWT</button>
+                        <div id="jwtValidation" class="stats" style="display: none;"></div>
+                    </div>
+                    <div class="output-section">
+                        <div class="output-header">
+                            <label class="form-label">Header:</label>
+                            <button class="btn btn--sm" id="copyJwtHeader">Copia</button>
+                        </div>
+                        <textarea id="jwtHeader" class="form-control" rows="4" readonly></textarea>
+                    </div>
+                    <div class="output-section">
+                        <div class="output-header">
+                            <label class="form-label">Payload:</label>
+                            <button class="btn btn--sm" id="copyJwtPayload">Copia</button>
+                        </div>
+                        <textarea id="jwtPayload" class="form-control" rows="6" readonly></textarea>
+                    </div>
+                    <div class="output-section">
+                        <div class="output-header">
+                            <label class="form-label">Signature (Hex):</label>
+                            <button class="btn btn--sm" id="copyJwtSignature">Copia</button>
+                        </div>
+                        <textarea id="jwtSignature" class="form-control" rows="2" readonly></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Certificate Info Extractor Tool -->
+            <div id="cert-extractor" class="tool-container">
+                <div class="tool-header">
+                    <h2>📜 Certificate Info Extractor</h2>
+                    <p>Estrae informazioni da certificati SSL/TLS in formato PEM</p>
+                </div>
+                <div class="tool-content">
+                    <div class="input-section">
+                        <label class="form-label">Certificato PEM:</label>
+                        <textarea id="certInput" class="form-control" rows="8" placeholder="-----BEGIN CERTIFICATE-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...
+-----END CERTIFICATE-----"></textarea>
+                    </div>
+                    <div class="process-section">
+                        <button class="btn btn--primary btn--full-width" id="extractCertBtn">Estrai Informazioni</button>
+                    </div>
+                    <div class="output-section">
+                        <div class="output-header">
+                            <label class="form-label">Informazioni Certificato:</label>
+                        </div>
+                        <div class="results-container">
+                            <div class="result-item">
+                                <span style="min-width: 120px;">Subject:</span>
+                                <span id="certSubject" class="result-text"></span>
+                                <button class="btn btn--sm" data-copy="certSubject">Copia</button>
+                            </div>
+                            <div class="result-item">
+                                <span style="min-width: 120px;">Issuer:</span>
+                                <span id="certIssuer" class="result-text"></span>
+                                <button class="btn btn--sm" data-copy="certIssuer">Copia</button>
+                            </div>
+                            <div class="result-item">
+                                <span style="min-width: 120px;">Serial Number:</span>
+                                <span id="certSerial" class="result-text"></span>
+                                <button class="btn btn--sm" data-copy="certSerial">Copia</button>
+                            </div>
+                            <div class="result-item">
+                                <span style="min-width: 120px;">Valid From:</span>
+                                <span id="certValidFrom" class="result-text"></span>
+                                <button class="btn btn--sm" data-copy="certValidFrom">Copia</button>
+                            </div>
+                            <div class="result-item">
+                                <span style="min-width: 120px;">Valid To:</span>
+                                <span id="certValidTo" class="result-text"></span>
+                                <button class="btn btn--sm" data-copy="certValidTo">Copia</button>
+                            </div>
+                            <div class="result-item">
+                                <span style="min-width: 120px;">Algorithm:</span>
+                                <span id="certAlgorithm" class="result-text"></span>
+                                <button class="btn btn--sm" data-copy="certAlgorithm">Copia</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Password Strength Checker Tool -->
+            <div id="password-checker" class="tool-container">
+                <div class="tool-header">
+                    <h2>🔒 Password Strength Checker</h2>
+                    <p>Analizza la robustezza delle password e fornisce suggerimenti</p>
+                </div>
+                <div class="tool-content">
+                    <div class="input-section">
+                        <label class="form-label">Password da Analizzare:</label>
+                        <input type="password" id="passwordInput" class="form-control" placeholder="Inserisci la password...">
+                        <label style="margin-top: var(--space-8);">
+                            <input type="checkbox" id="showPassword"> Mostra password
+                        </label>
+                    </div>
+                    <div class="process-section">
+                        <button class="btn btn--primary btn--full-width" id="checkPasswordBtn">Analizza Password</button>
+                    </div>
+                    <div class="output-section">
+                        <div class="output-header">
+                            <label class="form-label">Risultato Analisi:</label>
+                        </div>
+                        <div id="passwordStrength" style="margin-bottom: var(--space-16);"></div>
+                        <div class="results-container">
+                            <div class="result-item">
+                                <span>Lunghezza:</span>
+                                <span id="passwordLength" class="result-text"></span>
+                            </div>
+                            <div class="result-item">
+                                <span>Maiuscole:</span>
+                                <span id="passwordUppercase" class="result-text"></span>
+                            </div>
+                            <div class="result-item">
+                                <span>Minuscole:</span>
+                                <span id="passwordLowercase" class="result-text"></span>
+                            </div>
+                            <div class="result-item">
+                                <span>Numeri:</span>
+                                <span id="passwordNumbers" class="result-text"></span>
+                            </div>
+                            <div class="result-item">
+                                <span>Simboli:</span>
+                                <span id="passwordSymbols" class="result-text"></span>
+                            </div>
+                            <div class="result-item">
+                                <span>Score:</span>
+                                <span id="passwordScore" class="result-text"></span>
+                            </div>
+                        </div>
+                        <div id="passwordSuggestions" style="margin-top: var(--space-16); padding: var(--space-12); background: var(--color-bg-1); border-radius: var(--radius-base);"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QR Code Generator/Reader Tool -->
+            <div id="qr-generator" class="tool-container">
+                <div class="tool-header">
+                    <h2>📱 QR Code Generator/Reader</h2>
+                    <p>Genera codici QR da testo o leggi codici QR esistenti</p>
+                </div>
+                <div class="tool-content">
+                    <div class="input-section">
+                        <label class="form-label">Testo da Convertire in QR:</label>
+                        <textarea id="qrTextInput" class="form-control" rows="4" placeholder="https://example.com o qualsiasi testo..."></textarea>
+                    </div>
+                    <div class="options-section">
+                        <div class="setting-item">
+                            <label>Dimensione:</label>
+                            <select id="qrSize" class="form-control" style="max-width: 150px;">
+                                <option value="200">200x200</option>
+                                <option value="300" selected>300x300</option>
+                                <option value="400">400x400</option>
+                                <option value="500">500x500</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="process-section">
+                        <button class="btn btn--primary btn--full-width" id="generateQrBtn">Genera QR Code</button>
+                    </div>
+                    <div class="output-section">
+                        <div class="output-header">
+                            <label class="form-label">QR Code Generato:</label>
+                            <button class="btn btn--sm" id="downloadQrBtn" style="display: none;">Scarica PNG</button>
+                        </div>
+                        <div id="qrOutput" style="text-align: center; padding: var(--space-20); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-base); min-height: 100px; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: var(--color-text-secondary);">Il QR Code apparirà qui</span>
+                        </div>
+                    </div>
+                    <div class="input-section" style="margin-top: var(--space-24);">
+                        <label class="form-label">O Carica un'Immagine QR per Leggerla:</label>
+                        <input type="file" id="qrFileInput" class="form-control" accept="image/*">
+                    </div>
+                    <div class="output-section">
+                        <div class="output-header">
+                            <label class="form-label">Testo Decodificato:</label>
+                            <button class="btn btn--sm" id="copyQrText">Copia</button>
+                        </div>
+                        <textarea id="qrDecodedText" class="form-control" rows="4" readonly placeholder="Il testo decodificato apparirà qui..."></textarea>
                     </div>
                 </div>
             </div>

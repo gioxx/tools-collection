@@ -202,6 +202,10 @@ class OnlineToolsApp {
         this.initTimestampConverter();
         this.initHashGenerator();
         this.initXmlBeautifier();
+        this.initJwtDecoder();
+        this.initCertExtractor();
+        this.initPasswordChecker();
+        this.initQrGenerator();
     }
 
     // Utility function for copying to clipboard
@@ -1088,6 +1092,300 @@ class OnlineToolsApp {
 
         copyBtn?.addEventListener('click', () => {
             this.copyToClipboard(output.value);
+        });
+    }
+
+    // JWT Decoder/Validator
+    initJwtDecoder() {
+        const container = document.getElementById('jwt-decoder');
+        if (!container) return;
+
+        const input = document.getElementById('jwtInput');
+        const decodeBtn = document.getElementById('decodeJwtBtn');
+        const validation = document.getElementById('jwtValidation');
+        const headerOutput = document.getElementById('jwtHeader');
+        const payloadOutput = document.getElementById('jwtPayload');
+        const signatureOutput = document.getElementById('jwtSignature');
+
+        const base64UrlDecode = (str) => {
+            // Add padding if needed
+            str += new Array(5 - str.length % 4).join('=');
+            return atob(str.replace(/\-/g, '+').replace(/_/g, '/'));
+        };
+
+        decodeBtn?.addEventListener('click', () => {
+            const jwt = input.value.trim();
+            if (!jwt) return;
+
+            try {
+                const parts = jwt.split('.');
+                if (parts.length !== 3) {
+                    throw new Error('JWT deve avere 3 parti separate da punti');
+                }
+
+                // Decode header
+                const header = JSON.parse(base64UrlDecode(parts[0]));
+                headerOutput.value = JSON.stringify(header, null, 2);
+
+                // Decode payload
+                const payload = JSON.parse(base64UrlDecode(parts[1]));
+                payloadOutput.value = JSON.stringify(payload, null, 2);
+
+                // Show signature as hex (can't verify without secret)
+                const signatureBytes = atob(parts[2].replace(/\-/g, '+').replace(/_/g, '/'));
+                const signatureHex = Array.from(signatureBytes, byte => 
+                    ('0' + (byte & 0xFF).toString(16)).slice(-2)
+                ).join('');
+                signatureOutput.value = signatureHex;
+
+                // Basic validation
+                validation.style.display = 'block';
+                validation.className = 'stats success-message';
+                
+                let validationMsg = '✓ JWT decodificato con successo';
+                
+                // Check expiration
+                if (payload.exp) {
+                    const expDate = new Date(payload.exp * 1000);
+                    const now = new Date();
+                    if (expDate < now) {
+                        validationMsg += '<br>⚠️ Token scaduto il ' + expDate.toLocaleString();
+                    } else {
+                        validationMsg += '<br>✓ Token valido fino al ' + expDate.toLocaleString();
+                    }
+                }
+
+                // Check issued at
+                if (payload.iat) {
+                    const iatDate = new Date(payload.iat * 1000);
+                    validationMsg += '<br>📅 Emesso il ' + iatDate.toLocaleString();
+                }
+
+                validation.innerHTML = validationMsg;
+
+            } catch (e) {
+                validation.style.display = 'block';
+                validation.className = 'stats error-message';
+                validation.innerHTML = '✗ Errore: ' + e.message;
+                
+                headerOutput.value = '';
+                payloadOutput.value = '';
+                signatureOutput.value = '';
+            }
+        });
+
+        // Copy buttons
+        document.getElementById('copyJwtHeader')?.addEventListener('click', () => {
+            this.copyToClipboard(headerOutput.value);
+        });
+        document.getElementById('copyJwtPayload')?.addEventListener('click', () => {
+            this.copyToClipboard(payloadOutput.value);
+        });
+        document.getElementById('copyJwtSignature')?.addEventListener('click', () => {
+            this.copyToClipboard(signatureOutput.value);
+        });
+    }
+
+    // Certificate Info Extractor
+    initCertExtractor() {
+        const container = document.getElementById('cert-extractor');
+        if (!container) return;
+
+        const input = document.getElementById('certInput');
+        const extractBtn = document.getElementById('extractCertBtn');
+
+        const parseCertificate = (pemString) => {
+            // Remove PEM headers/footers and whitespace
+            const base64 = pemString
+                .replace(/-----BEGIN CERTIFICATE-----/, '')
+                .replace(/-----END CERTIFICATE-----/, '')
+                .replace(/\s/g, '');
+                
+            // This is a simplified parser - in real applications you'd use a proper ASN.1 parser
+            // For demonstration, we'll show placeholder data
+            return {
+                subject: 'Parsing certificati richiede librerie ASN.1 specializzate',
+                issuer: 'Questa è una versione semplificata per demo',
+                serialNumber: 'N/A - Parsing ASN.1 non implementato',
+                validFrom: 'Non disponibile',
+                validTo: 'Non disponibile',
+                algorithm: 'Non disponibile'
+            };
+        };
+
+        extractBtn?.addEventListener('click', () => {
+            const cert = input.value.trim();
+            if (!cert) return;
+
+            if (cert.includes('-----BEGIN CERTIFICATE-----')) {
+                try {
+                    const certInfo = parseCertificate(cert);
+                    
+                    document.getElementById('certSubject').textContent = certInfo.subject;
+                    document.getElementById('certIssuer').textContent = certInfo.issuer;
+                    document.getElementById('certSerial').textContent = certInfo.serialNumber;
+                    document.getElementById('certValidFrom').textContent = certInfo.validFrom;
+                    document.getElementById('certValidTo').textContent = certInfo.validTo;
+                    document.getElementById('certAlgorithm').textContent = certInfo.algorithm;
+                    
+                } catch (e) {
+                    alert('Errore nel parsing del certificato: ' + e.message);
+                }
+            } else {
+                alert('Formato certificato non valido. Inserisci un certificato PEM.');
+            }
+        });
+
+        // Copy functionality
+        container.querySelectorAll('button[data-copy]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const elementId = btn.getAttribute('data-copy');
+                const text = document.getElementById(elementId)?.textContent;
+                if (text) this.copyToClipboard(text);
+            });
+        });
+    }
+
+    // Password Strength Checker
+    initPasswordChecker() {
+        const container = document.getElementById('password-checker');
+        if (!container) return;
+
+        const input = document.getElementById('passwordInput');
+        const showPasswordCheck = document.getElementById('showPassword');
+        const checkBtn = document.getElementById('checkPasswordBtn');
+
+        showPasswordCheck?.addEventListener('change', () => {
+            input.type = showPasswordCheck.checked ? 'text' : 'password';
+        });
+
+        const checkPasswordStrength = (password) => {
+            let score = 0;
+            const checks = {
+                length: password.length >= 8,
+                uppercase: /[A-Z]/.test(password),
+                lowercase: /[a-z]/.test(password),
+                numbers: /\d/.test(password),
+                symbols: /[^A-Za-z0-9]/.test(password)
+            };
+
+            // Calculate score
+            if (password.length >= 8) score += 2;
+            if (password.length >= 12) score += 1;
+            if (checks.uppercase) score += 1;
+            if (checks.lowercase) score += 1;
+            if (checks.numbers) score += 1;
+            if (checks.symbols) score += 2;
+
+            // Additional checks
+            if (password.length >= 16) score += 1;
+            if (/(.)\1{2,}/.test(password)) score -= 1; // Repeated characters
+            if (/^(.{1,3})\1+$/.test(password)) score -= 2; // Pattern repetition
+
+            return { score: Math.max(0, score), checks };
+        };
+
+        checkBtn?.addEventListener('click', () => {
+            const password = input.value;
+            if (!password) return;
+
+            const result = checkPasswordStrength(password);
+            const { score, checks } = result;
+
+            // Update UI
+            document.getElementById('passwordLength').textContent = password.length;
+            document.getElementById('passwordUppercase').textContent = checks.uppercase ? '✓' : '✗';
+            document.getElementById('passwordLowercase').textContent = checks.lowercase ? '✓' : '✗';
+            document.getElementById('passwordNumbers').textContent = checks.numbers ? '✓' : '✗';
+            document.getElementById('passwordSymbols').textContent = checks.symbols ? '✓' : '✗';
+            document.getElementById('passwordScore').textContent = `${score}/8`;
+
+            // Strength indicator
+            const strengthElement = document.getElementById('passwordStrength');
+            let strengthText, strengthColor, strengthBg;
+
+            if (score <= 3) {
+                strengthText = 'Debole';
+                strengthColor = 'var(--color-error)';
+                strengthBg = 'rgba(var(--color-error-rgb), 0.1)';
+            } else if (score <= 5) {
+                strengthText = 'Media';
+                strengthColor = 'var(--color-warning)';
+                strengthBg = 'rgba(var(--color-warning-rgb), 0.1)';
+            } else {
+                strengthText = 'Forte';
+                strengthColor = 'var(--color-success)';
+                strengthBg = 'rgba(var(--color-success-rgb), 0.1)';
+            }
+
+            strengthElement.innerHTML = `
+                <div style="padding: var(--space-8); background: ${strengthBg}; color: ${strengthColor}; border-radius: var(--radius-base); text-align: center; font-weight: var(--font-weight-semibold);">
+                    Password: ${strengthText} (${score}/8)
+                </div>
+            `;
+
+            // Suggestions
+            const suggestions = [];
+            if (!checks.length) suggestions.push('• Usa almeno 8 caratteri');
+            if (!checks.uppercase) suggestions.push('• Aggiungi lettere maiuscole');
+            if (!checks.lowercase) suggestions.push('• Aggiungi lettere minuscole');
+            if (!checks.numbers) suggestions.push('• Aggiungi numeri');
+            if (!checks.symbols) suggestions.push('• Aggiungi simboli speciali');
+            if (password.length < 12) suggestions.push('• Considera di usare almeno 12 caratteri');
+
+            document.getElementById('passwordSuggestions').innerHTML = suggestions.length > 0 
+                ? `<strong>Suggerimenti:</strong><br>${suggestions.join('<br>')}`
+                : '<strong>✓ Password robusta!</strong>';
+        });
+    }
+
+    // QR Code Generator/Reader
+    initQrGenerator() {
+        const container = document.getElementById('qr-generator');
+        if (!container) return;
+
+        const textInput = document.getElementById('qrTextInput');
+        const sizeSelect = document.getElementById('qrSize');
+        const generateBtn = document.getElementById('generateQrBtn');
+        const qrOutput = document.getElementById('qrOutput');
+        const downloadBtn = document.getElementById('downloadQrBtn');
+        const fileInput = document.getElementById('qrFileInput');
+        const decodedText = document.getElementById('qrDecodedText');
+        const copyBtn = document.getElementById('copyQrText');
+
+        // Simple QR code generation using QR Server API
+        generateBtn?.addEventListener('click', () => {
+            const text = textInput.value.trim();
+            const size = sizeSelect.value;
+            
+            if (!text) return;
+
+            // Use QR Server API for generation (free service)
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(text)}`;
+            
+            qrOutput.innerHTML = `<img src="${qrUrl}" alt="QR Code" style="max-width: 100%; height: auto; border-radius: var(--radius-base);">`;
+            
+            downloadBtn.style.display = 'inline-block';
+            downloadBtn.onclick = () => {
+                const link = document.createElement('a');
+                link.href = qrUrl;
+                link.download = 'qrcode.png';
+                link.click();
+            };
+        });
+
+        // File reading for QR code decoding
+        fileInput?.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // Note: QR code reading from image requires a specialized library like jsQR
+            // For this demo, we'll show a placeholder message
+            decodedText.value = 'La lettura di QR code da immagine richiede librerie specializzate come jsQR. Questa funzionalità non è implementata in questa versione demo.';
+        });
+
+        copyBtn?.addEventListener('click', () => {
+            this.copyToClipboard(decodedText.value);
         });
     }
 }
