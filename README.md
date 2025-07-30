@@ -53,141 +53,59 @@ Online Tools Collection è un'applicazione web single-page che fornisce una suit
 
 ## 🛠️ Strumenti Disponibili
 
-### 📝 Elaborazione Testo
+> **23 strumenti** professionali per sviluppatori, content creator e security specialist
 
-#### 📋 List Generator
-Converte testo semplice in diversi formati di lista.
-- **Funzionalità**: 
-  - Lista numerata
-  - Lista puntata
-  - Separazione con virgole
-  - Separazione con pipe (|)
-- **Uso**: Ideale per formattare rapidamente liste per documentazione o presentazioni
+### 📝 Elaborazione Testo (6 strumenti)
 
-#### ✏️ Aggiungi Testo alle Righe
-Aggiunge prefissi o suffissi a ogni riga del testo.
-- **Funzionalità**:
-  - Aggiunta all'inizio della riga
-  - Aggiunta alla fine della riga
-  - Supporto per qualsiasi carattere o stringa
-- **Uso**: Perfetto per aggiungere bullet points, citazioni o formattazione markdown
+- **📋 List Generator** - Converte testo in liste formattate (numerata, puntata, virgole, pipe)
+- **✏️ Aggiungi Testo alle Righe** - Aggiunge prefissi/suffissi a ogni riga
+- **🔠 Converti Maiuscole/Minuscole** - Trasforma in UPPER, lower, Title, camelCase, snake_case
+- **❌ Rimuovi Righe Duplicate** - Elimina duplicati con opzioni case-sensitive
+- **📏 Rimuovi Interruzioni di Riga** - Unisce testo su singola riga
+- **🚫 Rimuovi Righe che Contengono** - Filtra righe per parole specifiche
 
-#### 🔠 Converti Maiuscole/Minuscole
-Trasforma il testo in diversi formati di case.
-- **Formati supportati**:
-  - MAIUSCOLO
-  - minuscolo
-  - Title Case
-  - camelCase
-  - snake_case
-  - CONSTANT_CASE
-- **Uso**: Essenziale per sviluppatori e content writer
+### 🎲 Generatori (2 strumenti)
 
-#### ❌ Rimuovi Righe Duplicate
-Elimina le righe duplicate da una lista.
-- **Opzioni**:
-  - Mantieni ordine originale
-  - Case sensitive/insensitive
-- **Uso**: Pulizia di dataset e liste
+- **🔑 Password Generator** - Genera password sicure con crypto API (8-50 caratteri)
+- **👤 Username Generator** - Crea username unici (Random, Tech, Fantasy, Cool)
 
-#### 📏 Rimuovi Interruzioni di Riga
-Unisce il testo su una singola riga.
-- **Opzioni di sostituzione**:
-  - Spazio
-  - Nessun carattere
-  - Carattere personalizzato
-- **Uso**: Formattazione di testi copiati da PDF o altre fonti
+### 🔍 Estrazione (2 strumenti)
 
-#### 🚫 Rimuovi Righe che Contengono
-Filtra le righe che contengono parole specifiche.
-- **Funzionalità**:
-  - Ricerca multipla (virgole separate)
-  - Case sensitive/insensitive
-  - Conteggio righe rimosse
-- **Uso**: Filtraggio log, pulizia dataset
+- **🌐 Estrattore Domini** - Estrae domini da URL con gestione sottodomini
+- **📧 Estrattore Email** - Trova email con pattern avanzati
 
-### 🎲 Generatori
+### 📊 Analisi (1 strumento)
 
-#### 🔑 Password Generator
-Genera password sicure e casuali.
-- **Opzioni**:
-  - Lunghezza personalizzabile (8-50 caratteri)
-  - Maiuscole (A-Z)
-  - Minuscole (a-z)
-  - Numeri (0-9)
-  - Simboli speciali (!@#$%^&*)
-- **Sicurezza**: Utilizza crypto API del browser per vera casualità
+- **🔢 Conta Duplicati** - Analizza occorrenze e frequenze con percentuali
 
-#### 👤 Username Generator
-Crea username unici e memorabili.
-- **Stili disponibili**:
-  - Random Words (parole casuali combinate)
-  - Tech Style (termini tecnologici)
-  - Fantasy (nomi fantastici)
-  - Cool (combinazioni moderne)
-- **Opzioni**: Genera fino a 20 username simultaneamente
+### 🔐 Sicurezza (6 strumenti)
 
-### 🔍 Estrazione
+- **🧪 Curl to Burp Converter** - Converte comandi curl per Burp Suite
+- **🛡️ IoC Escape Tool** - Escape/unescape Indicatori di Compromissione
+- **🔑 JWT Decoder/Validator** - Decodifica token JWT con validazione exp/iat
+- **📜 Certificate Info Extractor** - Estrae info da certificati SSL/TLS PEM
+- **🔒 Password Strength Checker** - Analizza robustezza con scoring 0-8
+- **📱 QR Code Generator/Reader** - Genera QR con download PNG
 
-#### 🌐 Estrattore Domini
-Estrae domini da una lista di URL.
-- **Funzionalità**:
-  - Estrazione domini principali
-  - Opzione per includere/escludere sottodomini
-  - Rimozione duplicati automatica
-- **Uso**: Analisi link, creazione whitelist/blacklist
+### 🔄 Convertitori (3 strumenti)
 
-#### 📧 Estrattore Email
-Trova tutte le email in un testo.
-- **Funzionalità**:
-  - Riconoscimento pattern email complessi
-  - Rimozione duplicati opzionale
-  - Conteggio email trovate
-- **Uso**: Estrazione contatti da testi, pulizia database
+- **😎 Emoji Shortcode Converter** - Converte tra emoji e shortcode
+- **🔐 Base64 Encoder/Decoder** - Codifica/decodifica Base64 con UTF-8
+- **🔗 URL Encoder/Decoder** - Encode/decode URL completi o componenti
 
-### 📊 Analisi
+### 💻 Sviluppo (4 strumenti)
 
-#### 🔢 Conta Duplicati
-Analizza e conta le occorrenze duplicate.
-- **Funzionalità**:
-  - Conteggio occorrenze per ogni elemento
-  - Ordinamento per frequenza
-  - Case sensitive/insensitive
-  - Visualizzazione percentuali
-- **Uso**: Analisi frequenza parole, identificazione pattern
+- **📄 JSON Formatter/Validator** - Formatta JSON con indentazione personalizzabile
+- **🔍 Diff Checker** - Confronta testi con opzioni ignore case/whitespace
+- **🔤 Regex Tester** - Testa regex con flags e gruppi di cattura
+- **📋 XML Beautifier** - Formatta e valida XML con indentazione
 
-### 🔐 Sicurezza
+### ⚙️ Utilità (3 strumenti)
 
-#### 🧪 Curl to Burp Converter
-Converte comandi curl in formato HTTP per Burp Suite.
-- **Supporto per**:
-  - Headers personalizzati
-  - Metodi HTTP (GET, POST, PUT, DELETE, etc.)
-  - Body delle richieste
-  - Parametri URL
-- **Uso**: Testing sicurezza web, analisi API
+- **🎨 Color Picker/Converter** - Converte HEX, RGB, RGBA, HSL con preview
+- **🕐 Timestamp Converter** - Converte timestamp Unix e formati data
+- **🔏 Hash Generator** - Genera hash SHA-1, SHA-256, SHA-512
 
-#### 🛡️ IoC Escape Tool
-Escape/unescape di Indicatori di Compromissione (IoC).
-- **Tipi supportati**:
-  - Indirizzi IP (IPv4/IPv6)
-  - Domini e URL
-  - Hash (MD5, SHA1, SHA256)
-  - Email
-- **Funzionalità**:
-  - Escape: example.com → example[.]com
-  - Unescape: example[.]com → example.com
-- **Uso**: Condivisione sicura di IoC in report di sicurezza
-
-### 😎 Convertitori
-
-#### 😊 Emoji Shortcode Converter
-Converte tra emoji e shortcode.
-- **Direzioni**:
-  - Shortcode → Emoji (:smile: → 😄)
-  - Emoji → Shortcode (😄 → :smile:)
-- **Database**: Supporta centinaia di emoji comuni
-- **Uso**: Scrittura per piattaforme che usano shortcode (Slack, Discord)
 
 ## 💻 Installazione
 
@@ -427,29 +345,40 @@ git push origin feature/nuovo-strumento
 
 ## 🗺️ Roadmap
 
-### Versione 1.1 (Q3 2025)
-- [X] Base64 Encoder/Decoder
-- [X] URL Encoder/Decoder
-- [X] JSON Formatter/Validator
-- [X] Diff Checker
+### ✅ Completato
+- [X] **23 Strumenti Base** - Elaborazione testo, generatori, sicurezza, convertitori
+- [X] **Design Responsive** - Ottimizzato per mobile con menu hamburger
+- [X] **Sistema Temi** - Dark/light mode con rilevamento automatico preferenze
+- [X] **Sicurezza Avanzata** - JWT, certificati, password checker, QR codes
 
-### Versione 1.2 (Q3 2025)
-- [X] Regex Tester
-- [X] Color Picker/Converter
-- [X] Timestamp Converter
-- [X] Hash Generator
+### 🔧 Sviluppo
+- [ ] API Response Formatter - Formatta risposte API
+- [ ] CRON Expression Builder - Costruisce espressioni cron
+- [ ] Lorem Ipsum Generator - Genera testo placeholder
+- [ ] Favicon Generator - Crea favicon da immagini
 
-### Versione 2.0 (Q4 2025)
-- [ ] PWA Support
-- [ ] Offline functionality
-- [ ] Import/Export settings
-- [ ] Keyboard shortcuts panel
+### 🎨 Design & Media 
+- [ ] Image Base64 Converter - Converte immagini in Base64
+- [ ] CSS Minifier/Beautifier - Minifica o formatta CSS
+- [ ] SVG Optimizer - Ottimizza codice SVG
+- [ ] Color Palette Generator - Genera palette colori
 
-### Idee Future
-- Integrazione API esterne
-- Estensione browser
-- Versione desktop (Electron)
-- Supporto multilingua
+### 📱 Mobile & Responsive
+- [ ] Device Mockup Generator - Preview responsive design
+- [ ] Viewport Size Reference - Dimensioni comuni dispositivi
+- [ ] Touch Target Checker - Verifica dimensioni touch
+
+### ⚡ Utilità Varie
+- [ ] Text Statistics - Conta parole, caratteri, paragrafi
+- [ ] Random Data Generator - Genera dati casuali (nomi, email, etc.)
+- [ ] Unit Converter - Converte unità di misura
+- [ ] Whitespace Visualizer - Mostra spazi invisibili
+
+### 🚀 Funzionalità Avanzate
+- [ ] PWA Support - Installazione come app
+- [ ] Offline functionality - Funzionamento offline
+- [ ] Import/Export settings - Salvataggio configurazioni
+- [ ] Keyboard shortcuts - Scorciatoie da tastiera
 
 ## 📄 Licenza
 
