@@ -49,6 +49,19 @@ describe('isHeicHeader', () => {
     expect(isHeicHeader(bytes)).toBe(false)
   })
 
+  it('parses 64-bit largesize ftyp boxes', () => {
+    const ascii = (text: string) => [...text].map((c) => c.charCodeAt(0))
+    const large = (major: string, compatible: string[]) =>
+      new Uint8Array([
+        0, 0, 0, 1, ...ascii('ftyp'),
+        0, 0, 0, 0, 0, 0, 0, 24 + compatible.length * 4,
+        ...ascii(major), 0, 0, 0, 0, ...compatible.flatMap(ascii),
+      ])
+    expect(isHeicHeader(large('heic', []))).toBe(true)
+    expect(isHeicHeader(large('mif1', ['mif1', 'heic']))).toBe(true)
+    expect(isHeicHeader(large('avif', ['mif1']))).toBe(false)
+  })
+
   it('rejects other ISO BMFF files such as MP4 and AVIF', () => {
     expect(isHeicHeader(header('isom', 'ftyp', ['isom', 'mp42']))).toBe(false)
     expect(isHeicHeader(header('avif', 'ftyp', ['avif', 'mif1', 'miaf']))).toBe(false)

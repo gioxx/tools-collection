@@ -22,13 +22,23 @@ const HEIC_EXTENSION = /\.(heic|heif)$/i
 export function isHeicHeader(bytes: Uint8Array): boolean {
   if (bytes.length < 12) return false
   const ascii = (start: number) => String.fromCharCode(...bytes.slice(start, start + 4))
+  const uint32 = (start: number) =>
+    ((bytes[start]! << 24) | (bytes[start + 1]! << 16) | (bytes[start + 2]! << 8) | bytes[start + 3]!) >>> 0
   if (ascii(4) !== 'ftyp') return false
-  const boxSize = ((bytes[0]! << 24) | (bytes[1]! << 16) | (bytes[2]! << 8) | bytes[3]!) >>> 0
-  const end = Math.min(boxSize >= 16 ? boxSize : 12, bytes.length)
-  const major = ascii(8)
-  if (HEVC_BRANDS.has(major)) return true
-  // Compatible brands follow the 4-byte minor version
-  for (let offset = 16; offset + 4 <= end; offset += 4) {
+  // size 1: 64-bit largesize follows the type; size 0: box runs to the end of the data
+  let headerSize = 8
+  let boxSize = uint32(0)
+  if (boxSize === 1) {
+    if (bytes.length < 20) return false
+    headerSize = 16
+    boxSize = uint32(8) === 0 ? uint32(12) : Number.MAX_SAFE_INTEGER
+  } else if (boxSize === 0) {
+    boxSize = bytes.length
+  }
+  const end = Math.min(boxSize, bytes.length)
+  if (HEVC_BRANDS.has(ascii(headerSize))) return true
+  // Compatible brands follow the major brand and the 4-byte minor version
+  for (let offset = headerSize + 8; offset + 4 <= end; offset += 4) {
     if (HEVC_BRANDS.has(ascii(offset))) return true
   }
   return false
