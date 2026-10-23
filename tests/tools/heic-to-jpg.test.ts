@@ -33,6 +33,11 @@ describe('isHeicHeader', () => {
     expect(isHeicHeader(header('msf1', 'ftyp', ['hevc']))).toBe(true)
   })
 
+  it('accepts MIAF major brands that advertise HEVC compatibility', () => {
+    expect(isHeicHeader(header('MiPr', 'ftyp', ['mif1', 'MiPr', 'miaf', 'MiHB', 'heic']))).toBe(true)
+    expect(isHeicHeader(header('MiHB', 'ftyp', ['heic']))).toBe(true)
+  })
+
   it('rejects generic HEIF major brands without an HEVC brand (e.g. AVIF)', () => {
     expect(isHeicHeader(header('mif1', 'ftyp', ['mif1', 'avif', 'miaf']))).toBe(false)
     expect(isHeicHeader(header('mif2'))).toBe(false)
@@ -45,8 +50,8 @@ describe('isHeicHeader', () => {
   })
 
   it('rejects other ISO BMFF files such as MP4 and AVIF', () => {
-    expect(isHeicHeader(header('isom'))).toBe(false)
-    expect(isHeicHeader(header('avif'))).toBe(false)
+    expect(isHeicHeader(header('isom', 'ftyp', ['isom', 'mp42']))).toBe(false)
+    expect(isHeicHeader(header('avif', 'ftyp', ['avif', 'mif1', 'miaf']))).toBe(false)
   })
 
   it('rejects files without an ftyp box', () => {

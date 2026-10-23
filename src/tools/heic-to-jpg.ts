@@ -7,8 +7,6 @@ export const MAX_JPEG_QUALITY = 1
 
 // HEVC-coded HEIF brands (iPhone photos are "heic")
 const HEVC_BRANDS = new Set(['heic', 'heix', 'heim', 'heis', 'hevc', 'hevx', 'hevm', 'hevs'])
-// Generic HEIF structural brands: also used by AVIF, so they only count with an HEVC brand alongside
-const STRUCTURAL_BRANDS = new Set(['mif1', 'mif2', 'msf1'])
 
 /** Bytes to read from the start of a file to cover a typical ftyp box. */
 export const HEADER_BYTES = 512
@@ -16,9 +14,10 @@ export const HEADER_BYTES = 512
 const HEIC_EXTENSION = /\.(heic|heif)$/i
 
 /**
- * Checks the leading ISO BMFF "ftyp" box: the major brand must be an HEVC HEIF
- * brand, or a generic HEIF brand (mif1/mif2/msf1) with an HEVC brand among the
- * compatible brands. Pass the first HEADER_BYTES bytes of the file.
+ * Checks the leading ISO BMFF "ftyp" box: the major brand or one of the
+ * compatible brands must be an HEVC HEIF brand. Generic HEIF/MIAF majors
+ * (mif1, mif2, MiPr, ...) are shared with AVIF, so they only count when an
+ * HEVC brand is advertised. Pass the first HEADER_BYTES bytes of the file.
  */
 export function isHeicHeader(bytes: Uint8Array): boolean {
   if (bytes.length < 12) return false
@@ -28,7 +27,6 @@ export function isHeicHeader(bytes: Uint8Array): boolean {
   const end = Math.min(boxSize >= 16 ? boxSize : 12, bytes.length)
   const major = ascii(8)
   if (HEVC_BRANDS.has(major)) return true
-  if (!STRUCTURAL_BRANDS.has(major)) return false
   // Compatible brands follow the 4-byte minor version
   for (let offset = 16; offset + 4 <= end; offset += 4) {
     if (HEVC_BRANDS.has(ascii(offset))) return true
