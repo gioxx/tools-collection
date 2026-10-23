@@ -6,6 +6,7 @@ import { downloadFile } from '../../lib/download'
 import {
   validateHeicHeader,
   toJpgFileName,
+  HEADER_BYTES,
   clampJpegQuality,
   uniqueFileNames,
   DEFAULT_JPEG_QUALITY,
@@ -54,7 +55,7 @@ export default function HeicToJpg(props: Props) {
   const convert = async (item: Item) => {
     update(item.id, { status: 'converting' })
     try {
-      const header = new Uint8Array(await item.file.slice(0, 12).arrayBuffer())
+      const header = new Uint8Array(await item.file.slice(0, HEADER_BYTES).arrayBuffer())
       const valid = validateHeicHeader(header)
       if (!valid.ok) {
         if (!disposed) fail(item, valid.error.code, valid.error.message)

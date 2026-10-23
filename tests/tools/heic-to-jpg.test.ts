@@ -10,8 +10,10 @@ import {
   MIN_JPEG_QUALITY,
 } from '../../src/tools/heic-to-jpg'
 
-function header(brand: string, box = 'ftyp'): Uint8Array {
-  return new Uint8Array([0, 0, 0, 24, ...[...box, ...brand].map((c) => c.charCodeAt(0))])
+function header(brand: string, box = 'ftyp', compatible: string[] = []): Uint8Array {
+  const ascii = (text: string) => [...text].map((c) => c.charCodeAt(0))
+  const size = 16 + compatible.length * 4
+  return new Uint8Array([0, 0, 0, size, ...ascii(box), ...ascii(brand), 0, 0, 0, 0, ...compatible.flatMap(ascii)])
 }
 
 describe('isHeicHeader', () => {
@@ -19,10 +21,27 @@ describe('isHeicHeader', () => {
     expect(isHeicHeader(header('heic'))).toBe(true)
   })
 
-  it('accepts generic HEIF brands', () => {
-    for (const brand of ['heix', 'hevc', 'mif1', 'msf1']) {
+  it('accepts other HEVC HEIF brands', () => {
+    for (const brand of ['heix', 'hevc', 'heim']) {
       expect(isHeicHeader(header(brand))).toBe(true)
     }
+  })
+
+  it('accepts generic HEIF major brands with an HEVC compatible brand', () => {
+    expect(isHeicHeader(header('mif1', 'ftyp', ['mif1', 'heic']))).toBe(true)
+    expect(isHeicHeader(header('mif2', 'ftyp', ['mif2', 'miaf', 'heic']))).toBe(true)
+    expect(isHeicHeader(header('msf1', 'ftyp', ['hevc']))).toBe(true)
+  })
+
+  it('rejects generic HEIF major brands without an HEVC brand (e.g. AVIF)', () => {
+    expect(isHeicHeader(header('mif1', 'ftyp', ['mif1', 'avif', 'miaf']))).toBe(false)
+    expect(isHeicHeader(header('mif2'))).toBe(false)
+  })
+
+  it('ignores compatible brands past the end of the ftyp box', () => {
+    const bytes = header('mif1', 'ftyp', ['heic'])
+    bytes[3] = 16 // box ends before the compatible brand
+    expect(isHeicHeader(bytes)).toBe(false)
   })
 
   it('rejects other ISO BMFF files such as MP4 and AVIF', () => {

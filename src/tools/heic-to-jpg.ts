@@ -5,19 +5,35 @@ export const DEFAULT_JPEG_QUALITY = 0.9
 export const MIN_JPEG_QUALITY = 0.1
 export const MAX_JPEG_QUALITY = 1
 
-// ISO BMFF major brands used by HEIC/HEIF stills and sequences (iPhone photos are "heic")
-const HEIF_BRANDS = new Set(['heic', 'heix', 'heim', 'heis', 'hevc', 'hevx', 'mif1', 'msf1'])
+// HEVC-coded HEIF brands (iPhone photos are "heic")
+const HEVC_BRANDS = new Set(['heic', 'heix', 'heim', 'heis', 'hevc', 'hevx'])
+// Generic HEIF structural brands: also used by AVIF, so they only count with an HEVC brand alongside
+const STRUCTURAL_BRANDS = new Set(['mif1', 'mif2', 'msf1'])
+
+/** Bytes to read from the start of a file to cover a typical ftyp box. */
+export const HEADER_BYTES = 512
 
 const HEIC_EXTENSION = /\.(heic|heif)$/i
 
 /**
- * Checks the ISO BMFF header: bytes 4-7 must be "ftyp" and bytes 8-11 a HEIF brand.
- * Pass at least the first 12 bytes of the file.
+ * Checks the leading ISO BMFF "ftyp" box: the major brand must be an HEVC HEIF
+ * brand, or a generic HEIF brand (mif1/mif2/msf1) with an HEVC brand among the
+ * compatible brands. Pass the first HEADER_BYTES bytes of the file.
  */
 export function isHeicHeader(bytes: Uint8Array): boolean {
   if (bytes.length < 12) return false
-  const ascii = (start: number, end: number) => String.fromCharCode(...bytes.slice(start, end))
-  return ascii(4, 8) === 'ftyp' && HEIF_BRANDS.has(ascii(8, 12))
+  const ascii = (start: number) => String.fromCharCode(...bytes.slice(start, start + 4))
+  if (ascii(4) !== 'ftyp') return false
+  const boxSize = ((bytes[0]! << 24) | (bytes[1]! << 16) | (bytes[2]! << 8) | bytes[3]!) >>> 0
+  const end = Math.min(boxSize >= 16 ? boxSize : 12, bytes.length)
+  const major = ascii(8)
+  if (HEVC_BRANDS.has(major)) return true
+  if (!STRUCTURAL_BRANDS.has(major)) return false
+  // Compatible brands follow the 4-byte minor version
+  for (let offset = 16; offset + 4 <= end; offset += 4) {
+    if (HEVC_BRANDS.has(ascii(offset))) return true
+  }
+  return false
 }
 
 export function hasHeicExtension(fileName: string): boolean {
