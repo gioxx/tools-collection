@@ -46,6 +46,9 @@ code.
   should cite this ADR at the next evidence regeneration.
 - `e2e/tools/heic-to-jpg.spec.ts` asserts the conversion runs with no CSP
   violations, guarding the directives against regressions.
-- `heic-to` and libheif are LGPL-3.0, loaded as a separate lazy chunk; the
-  licensing fit with the MIT project is part of accepting this ADR.
+- `heic-to`, libheif and libde265 are LGPL-3.0, loaded as a separate lazy
+  chunk; the licensing fit with the MIT project is part of accepting this ADR.
+  The shipped site carries the LGPL/GPL texts and a notice with source links
+  under `/licenses/heic-to/`, linked from the tool page; a unit test fails if
+  the notice falls out of sync with the installed `heic-to` version.
 - If the HEIC tool is removed, both directives should be removed with it.

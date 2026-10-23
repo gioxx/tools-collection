@@ -579,6 +579,8 @@
   "tools_heicToJpg_uploadHint": "Drop photos here or click to browse",
   "tools_heicToJpg_qualityLabel": "JPG quality:",
   "tools_heicToJpg_privacyNote": "Photos are converted on your device and never uploaded. EXIF metadata (date, location, camera) is not kept in the JPG files.",
+  "tools_heicToJpg_licenseNote": "Uses heic-to, libheif and libde265 (LGPL-3.0)",
+  "tools_heicToJpg_licenseLink": "licenses and source",
   "tools_heicToJpg_statusQueued": "Queued",
   "tools_heicToJpg_statusConverting": "Converting…",
   "tools_heicToJpg_statusDone": "Converted",

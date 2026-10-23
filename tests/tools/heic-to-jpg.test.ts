@@ -22,7 +22,7 @@ describe('isHeicHeader', () => {
   })
 
   it('accepts other HEVC HEIF brands', () => {
-    for (const brand of ['heix', 'hevc', 'heim']) {
+    for (const brand of ['heix', 'hevc', 'heim', 'hevm', 'hevs']) {
       expect(isHeicHeader(header(brand))).toBe(true)
     }
   })
@@ -131,5 +131,19 @@ describe('uniqueFileNames', () => {
 
   it('does not collide with an existing numbered name', () => {
     expect(uniqueFileNames(['a (2).jpg', 'a.jpg', 'a.jpg'])).toEqual(['a (2).jpg', 'a.jpg', 'a (3).jpg'])
+  })
+})
+
+describe('LGPL notice for the bundled decoder', () => {
+  it('names the installed heic-to version', async () => {
+    const { readFileSync } = await import('node:fs')
+    const lock = JSON.parse(readFileSync('package-lock.json', 'utf8')) as {
+      packages: Record<string, { version: string }>
+    }
+    const version = lock.packages['node_modules/heic-to']!.version
+    const notice = readFileSync('public/licenses/heic-to/NOTICE.txt', 'utf8')
+    // A dependency bump must update the notice (versions and source links)
+    expect(notice).toContain(`heic-to   ${version}`)
+    expect(notice).toContain(`heic-to/tree/v${version}`)
   })
 })

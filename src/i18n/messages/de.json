@@ -579,6 +579,8 @@
   "tools_heicToJpg_uploadHint": "Fotos hierher ziehen oder zum Auswählen klicken",
   "tools_heicToJpg_qualityLabel": "JPG-Qualität:",
   "tools_heicToJpg_privacyNote": "Die Fotos werden auf deinem Gerät umgewandelt und nie hochgeladen. EXIF-Metadaten (Datum, Standort, Kamera) bleiben in den JPG-Dateien nicht erhalten.",
+  "tools_heicToJpg_licenseNote": "Verwendet heic-to, libheif und libde265 (LGPL-3.0)",
+  "tools_heicToJpg_licenseLink": "Lizenzen und Quellcode",
   "tools_heicToJpg_statusQueued": "In Warteschlange",
   "tools_heicToJpg_statusConverting": "Wird umgewandelt…",
   "tools_heicToJpg_statusDone": "Umgewandelt",

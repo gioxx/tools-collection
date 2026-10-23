@@ -164,6 +164,12 @@ export default function HeicToJpg(props: Props) {
       />
 
       <p class="text-sm text-text-secondary">{t(props.lang, 'tools_heicToJpg_privacyNote')}</p>
+      <p class="text-xs text-text-secondary">
+        {t(props.lang, 'tools_heicToJpg_licenseNote')} —{' '}
+        <a href="/licenses/heic-to/NOTICE.txt" class="underline hover:text-accent">
+          {t(props.lang, 'tools_heicToJpg_licenseLink')}
+        </a>
+      </p>
 
       {/* Persistent live regions: per-file progress happens while focus stays on the file input */}
       <p class="sr-only" role="status" aria-live="polite" data-testid="heic-status">{announcement()}</p>

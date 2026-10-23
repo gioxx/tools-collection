@@ -6,7 +6,7 @@ export const MIN_JPEG_QUALITY = 0.1
 export const MAX_JPEG_QUALITY = 1
 
 // HEVC-coded HEIF brands (iPhone photos are "heic")
-const HEVC_BRANDS = new Set(['heic', 'heix', 'heim', 'heis', 'hevc', 'hevx'])
+const HEVC_BRANDS = new Set(['heic', 'heix', 'heim', 'heis', 'hevc', 'hevx', 'hevm', 'hevs'])
 // Generic HEIF structural brands: also used by AVIF, so they only count with an HEVC brand alongside
 const STRUCTURAL_BRANDS = new Set(['mif1', 'mif2', 'msf1'])
 
