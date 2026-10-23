@@ -1,0 +1,12 @@
+// Cloudflare Workers deployment (static assets only, no Worker script).
+// Build with `npm run build`, deploy with `npx wrangler deploy`.
+{
+  "name": "tools-collection",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "none"
+  },
+  "workers_dev": true
+}
