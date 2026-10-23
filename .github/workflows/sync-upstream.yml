@@ -2,9 +2,8 @@ name: Sync upstream
 
 # Fork-only: merge amargiovanni/tools-collection main into this fork's main every night.
 # The push triggers Cloudflare Workers Builds, which deploys tools.gioxx.org.
-# UPSTREAM_SYNC_TOKEN: fine-grained PAT on this repo with Contents and Workflows read/write
-# (GITHUB_TOKEN cannot merge upstream changes to .github/workflows).
-# A conflict makes the job fail (HTTP 409): resolve it locally and push.
+# Uses GITHUB_TOKEN, which can never update .github/workflows: when upstream changes a workflow
+# (or on a conflict) the job fails; use "Sync fork" on GitHub, or merge locally and push.
 
 on:
   schedule:
@@ -17,10 +16,12 @@ jobs:
   sync:
     if: github.repository == 'gioxx/tools-collection'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Merge upstream main
         env:
-          GH_TOKEN: ${{ secrets.UPSTREAM_SYNC_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           gh api -X POST "repos/${{ github.repository }}/merge-upstream" -f branch=main --jq '"\(.merge_type): \(.message)"'
 
