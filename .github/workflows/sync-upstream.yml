@@ -23,3 +23,15 @@ jobs:
           GH_TOKEN: ${{ secrets.UPSTREAM_SYNC_TOKEN }}
         run: |
           gh api -X POST "repos/${{ github.repository }}/merge-upstream" -f branch=main --jq '"\(.merge_type): \(.message)"'
+
+  keepalive:
+    name: Keep workflow alive
+    needs:
+      - sync
+    if: ${{ always() && github.event_name == 'schedule' }}
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Keep scheduled workflow alive
+        uses: liskin/gh-workflow-keepalive@v1
