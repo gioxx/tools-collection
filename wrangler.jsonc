@@ -8,5 +8,6 @@
     "html_handling": "auto-trailing-slash",
     "not_found_handling": "none"
   },
-  "workers_dev": true
+  "workers_dev": true,
+  "routes": [{ "pattern": "tools.gioxx.org", "custom_domain": true }]
 }
