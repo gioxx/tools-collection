@@ -36,29 +36,39 @@ let nextId = 0
 export default function HeicToJpg(props: Props) {
   const [items, setItems] = createSignal<Item[]>([])
   const [quality, setQuality] = createSignal(DEFAULT_JPEG_QUALITY)
+  const [announcement, setAnnouncement] = createSignal('')
+  const [alertMessage, setAlertMessage] = createSignal('')
   let running = false
+  // Set on unmount (e.g. ClientRouter navigation): stops the queue and discards late results
+  let disposed = false
 
   const update = (id: number, patch: Partial<Item>) =>
     setItems((list) => list.map((item) => (item.id === id ? { ...item, ...patch } : item)))
 
-  const fail = (id: number, code: string, message: string) =>
-    update(id, { status: 'error', error: translateError(props.lang, { code, message }) })
+  const fail = (item: Item, code: string, message: string) => {
+    const error = translateError(props.lang, { code, message })
+    update(item.id, { status: 'error', error })
+    setAlertMessage(`${item.file.name}: ${error}`)
+  }
 
   const convert = async (item: Item) => {
     update(item.id, { status: 'converting' })
-    const header = new Uint8Array(await item.file.slice(0, 12).arrayBuffer())
-    const valid = validateHeicHeader(header)
-    if (!valid.ok) {
-      fail(item.id, valid.error.code, valid.error.message)
-      return
-    }
     try {
+      const header = new Uint8Array(await item.file.slice(0, 12).arrayBuffer())
+      const valid = validateHeicHeader(header)
+      if (!valid.ok) {
+        if (!disposed) fail(item, valid.error.code, valid.error.message)
+        return
+      }
       // libheif (WASM, ~3 MB) is only fetched once a conversion actually starts
       const { heicTo } = await import('heic-to/csp')
       const jpeg = await heicTo({ blob: item.file, type: 'image/jpeg', quality: clampJpegQuality(quality()) })
+      if (disposed) return
       update(item.id, { status: 'done', jpeg, url: URL.createObjectURL(jpeg) })
+      setAnnouncement(`${item.file.name}: ${t(props.lang, 'tools_heicToJpg_statusDone')}`)
     } catch (e) {
-      fail(item.id, 'HEIC_CONVERSION_FAILED', e instanceof Error ? e.message : String(e))
+      // Covers unreadable files too (e.g. removed from a disconnected volume)
+      if (!disposed) fail(item, 'HEIC_CONVERSION_FAILED', e instanceof Error ? e.message : String(e))
     }
   }
 
@@ -67,7 +77,7 @@ export default function HeicToJpg(props: Props) {
     if (running) return
     running = true
     try {
-      for (let next = items().find((i) => i.status === 'queued'); next; next = items().find((i) => i.status === 'queued')) {
+      for (let next = items().find((i) => i.status === 'queued'); next && !disposed; next = items().find((i) => i.status === 'queued')) {
         await convert(next)
       }
     } finally {
@@ -104,9 +114,14 @@ export default function HeicToJpg(props: Props) {
   const clear = () => {
     revokeAll()
     setItems([])
+    setAnnouncement('')
+    setAlertMessage('')
   }
 
-  onCleanup(revokeAll)
+  onCleanup(() => {
+    disposed = true
+    revokeAll()
+  })
 
   const statusBadge = (item: Item) => {
     switch (item.status) {
@@ -148,6 +163,10 @@ export default function HeicToJpg(props: Props) {
       />
 
       <p class="text-sm text-text-secondary">{t(props.lang, 'tools_heicToJpg_privacyNote')}</p>
+
+      {/* Persistent live regions: per-file progress happens while focus stays on the file input */}
+      <p class="sr-only" role="status" aria-live="polite" data-testid="heic-status">{announcement()}</p>
+      <p class="sr-only" role="alert">{alertMessage()}</p>
 
       <Show when={items().length > 0}>
         <ul class="flex flex-col gap-2" data-testid="heic-file-list">

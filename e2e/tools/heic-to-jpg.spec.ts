@@ -28,6 +28,8 @@ test.describe('HEIC to JPG', () => {
     const list = page.locator('[data-testid="heic-file-list"]')
     await expect(list.getByText('Converted')).toBeVisible({ timeout: 30000 })
     await expect(list.locator('img[alt="sample.jpg"]')).toBeVisible()
+    // Completion is announced to assistive technology, not only shown
+    await expect(page.getByRole('status').filter({ hasText: 'sample.heic' })).toContainText('Converted')
 
     const downloadPromise = page.waitForEvent('download')
     await list.getByRole('button', { name: 'Download sample.jpg' }).click()
@@ -61,6 +63,7 @@ test.describe('HEIC to JPG', () => {
       buffer: Buffer.from('this is not an image'),
     })
 
-    await expect(page.getByText('The file is not a HEIC/HEIF image')).toBeVisible()
+    await expect(page.locator('[data-testid="heic-file-list"]').getByText('The file is not a HEIC/HEIF image')).toBeVisible()
+    await expect(page.getByRole('alert').filter({ hasText: 'fake.heic' })).toContainText('The file is not a HEIC/HEIF image')
   })
 })

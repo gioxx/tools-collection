@@ -117,7 +117,7 @@ export default defineConfig({
         "connect-src 'self' https://cloudflareinsights.com",
         "font-src 'self' https://fonts.gstatic.com",
         "object-src 'none'",
-        // HEIC to JPG: heic-to/csp runs libheif in a Web Worker built from a blob: URL
+        // HEIC to JPG: heic-to/csp runs libheif in a Web Worker built from a blob: URL (ADR 0003)
         "worker-src 'self' blob:",
         "base-uri 'self'",
         "form-action 'self'",
